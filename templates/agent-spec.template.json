@@ -1,0 +1,17 @@
+{
+  "id": "example-agent",
+  "name": "Example Agent",
+  "businessOutcome": "",
+  "targetUsers": [],
+  "serviceNowSurface": "AI Agent Studio",
+  "role": "",
+  "responsibilities": [],
+  "inputs": [],
+  "outputs": [],
+  "toolsOrPlatformActions": [],
+  "mustNotDo": [],
+  "approvalGates": [],
+  "auditRequirements": [],
+  "rollbackPlan": "",
+  "tests": []
+}

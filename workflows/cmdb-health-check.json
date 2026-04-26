@@ -1,0 +1,36 @@
+{
+  "id": "cmdb-health-check",
+  "name": "CMDB Health Check Agentic Workflow",
+  "serviceNowSurface": "AI Agent Studio plus CMDB read-only analysis",
+  "trigger": "Manual assessment request from a platform owner",
+  "businessOutcome": "Help a platform team identify CMDB health issues and create a prioritized remediation plan without making automatic production changes.",
+  "inputs": [
+    "scope",
+    "CI classes",
+    "time window",
+    "known data quality rules"
+  ],
+  "agents": [
+    "Business Analyst Agent",
+    "CTA Agent",
+    "Workflow Composer",
+    "Guardrails Reviewer"
+  ],
+  "steps": [
+    "Capture assessment scope and target CI classes.",
+    "Read health signals and known exception rules.",
+    "Group issues by business impact and remediation effort.",
+    "Draft recommended actions with affected record estimates.",
+    "Route any write action to human approval and change control.",
+    "Produce an executive summary and practitioner task list."
+  ],
+  "approvalPoints": [
+    "Before any CMDB record update",
+    "Before sending a report outside the platform team"
+  ],
+  "tests": [
+    "Empty scope returns a clarification request.",
+    "Read-only mode produces recommendations but no writes.",
+    "High-risk class changes require approval."
+  ]
+}

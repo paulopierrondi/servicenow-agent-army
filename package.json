@@ -1,0 +1,28 @@
+{
+  "name": "servicenow-agent-army",
+  "version": "0.1.0",
+  "private": false,
+  "description": "Prompt-first starter kit for creating ServiceNow AI agents, workflows, skills, and SDK scaffolds with Codex and Claude Agent SDK.",
+  "type": "module",
+  "license": "MIT",
+  "scripts": {
+    "validate": "node scripts/validate-catalog.mjs",
+    "new:agent": "node scripts/new-agent.mjs"
+  },
+  "keywords": [
+    "servicenow",
+    "ai-agents",
+    "agentic-workflows",
+    "codex",
+    "claude-agent-sdk",
+    "servicenow-sdk",
+    "fluent",
+    "prompt-engineering"
+  ],
+  "devDependencies": {
+    "@anthropic-ai/claude-agent-sdk": "^0.2.119",
+    "@openai/agents": "^0.8.5",
+    "@openai/codex-sdk": "^0.125.0",
+    "@servicenow/sdk": "^4.6.0"
+  }
+}

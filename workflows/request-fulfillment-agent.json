@@ -1,0 +1,39 @@
+{
+  "id": "request-fulfillment-agent",
+  "name": "Request Fulfillment Agentic Workflow",
+  "serviceNowSurface": "AI Agent Studio plus Flow Designer handoff",
+  "trigger": "Catalog request created",
+  "businessOutcome": "Guide request fulfillment by checking completeness, policy fit, and required approvals before a Flow Designer handoff.",
+  "inputs": [
+    "request item",
+    "requested for",
+    "catalog item",
+    "variables",
+    "approval policy"
+  ],
+  "agents": [
+    "Workflow Composer",
+    "ServiceNow SDK Builder",
+    "Guardrails Reviewer"
+  ],
+  "steps": [
+    "Validate required variables.",
+    "Summarize requested outcome.",
+    "Check policy and approval requirements.",
+    "Draft fulfillment plan.",
+    "Identify automation path or manual task owner.",
+    "Request human approval for exceptions.",
+    "Hand off eligible requests to a controlled flow.",
+    "Log the decision and next action."
+  ],
+  "approvalPoints": [
+    "Before exception fulfillment",
+    "Before any external system action",
+    "Before high-cost or privileged access requests"
+  ],
+  "tests": [
+    "Missing variable returns a clarification request.",
+    "Privileged access requires approval.",
+    "Eligible standard request produces a flow handoff plan."
+  ]
+}

@@ -1,0 +1,29 @@
+[
+  {
+    "id": "cmdb-health-check",
+    "name": "CMDB Health Check Agentic Workflow",
+    "serviceNowSurface": "AI Agent Studio plus CMDB read-only analysis",
+    "trigger": "Manual assessment request from a platform owner",
+    "agents": ["business-analyst-agent", "cta-agent", "workflow-composer", "guardrails-reviewer"],
+    "steps": 6,
+    "path": "workflows/cmdb-health-check.json"
+  },
+  {
+    "id": "incident-resolution-plan",
+    "name": "Incident Resolution Plan Agentic Workflow",
+    "serviceNowSurface": "AI Agent Studio for plan generation with human approval",
+    "trigger": "Incident enters triage state",
+    "agents": ["business-analyst-agent", "workflow-composer", "guardrails-reviewer"],
+    "steps": 7,
+    "path": "workflows/incident-resolution-plan.json"
+  },
+  {
+    "id": "request-fulfillment-agent",
+    "name": "Request Fulfillment Agentic Workflow",
+    "serviceNowSurface": "AI Agent Studio plus Flow Designer handoff",
+    "trigger": "Catalog request created",
+    "agents": ["workflow-composer", "servicenow-sdk-builder", "guardrails-reviewer"],
+    "steps": 8,
+    "path": "workflows/request-fulfillment-agent.json"
+  }
+]

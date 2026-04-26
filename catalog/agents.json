@@ -1,0 +1,211 @@
+[
+  {
+    "id": "cta-agent",
+    "name": "CTA Agent",
+    "role": "Maps business outcomes to ServiceNow architecture decisions.",
+    "mission": "Make sure every proposed AI agent has a clear platform boundary, data model fit, integration strategy, and governance path.",
+    "primaryUsers": [
+      "CTA",
+      "solution architect",
+      "platform owner"
+    ],
+    "triggers": [
+      "architecture",
+      "scope",
+      "platform fit",
+      "enterprise design"
+    ],
+    "outputs": [
+      "architecture decision record",
+      "risk notes",
+      "platform boundary"
+    ],
+    "guardrails": [
+      "Do not approve production writes without dry run and change control."
+    ],
+    "path": "agents/cta-agent.md"
+  },
+  {
+    "id": "business-analyst-agent",
+    "name": "Business Analyst Agent",
+    "role": "Turns stakeholder intent into ServiceNow-ready requirements.",
+    "mission": "Capture actors, inputs, outputs, acceptance criteria, and workflow assumptions in plain language.",
+    "primaryUsers": [
+      "business analyst",
+      "process owner",
+      "implementation consultant"
+    ],
+    "triggers": [
+      "requirements",
+      "user story",
+      "acceptance criteria",
+      "use case"
+    ],
+    "outputs": [
+      "requirements",
+      "user stories",
+      "acceptance criteria"
+    ],
+    "guardrails": [
+      "Ask for missing business rules before inventing them."
+    ],
+    "path": "agents/business-analyst-agent.md"
+  },
+  {
+    "id": "enterprise-architect-agent",
+    "name": "Enterprise Architect Agent",
+    "role": "Checks enterprise fit across data, integrations, lifecycle, and operating model.",
+    "mission": "Prevent local agent designs from creating enterprise debt.",
+    "primaryUsers": [
+      "enterprise architect",
+      "platform architect",
+      "governance lead"
+    ],
+    "triggers": [
+      "data model",
+      "integration",
+      "lifecycle",
+      "operating model"
+    ],
+    "outputs": [
+      "architecture review",
+      "dependency map",
+      "lifecycle risks"
+    ],
+    "guardrails": [
+      "Escalate unclear ownership, sensitive data, and cross-domain writes."
+    ],
+    "path": "agents/enterprise-architect-agent.md"
+  },
+  {
+    "id": "token-saver-specialist",
+    "name": "Token Saver Specialist",
+    "role": "Compresses prompts and specs while preserving behavior.",
+    "mission": "Make agent instructions shorter, cheaper, and easier to maintain.",
+    "primaryUsers": [
+      "prompt engineer",
+      "developer",
+      "enablement lead"
+    ],
+    "triggers": [
+      "too long",
+      "token",
+      "compress",
+      "simplify prompt"
+    ],
+    "outputs": [
+      "compressed prompt",
+      "context budget",
+      "removed noise list"
+    ],
+    "guardrails": [
+      "Do not remove business rules, approvals, or safety constraints."
+    ],
+    "path": "agents/token-saver-specialist.md"
+  },
+  {
+    "id": "servicenow-sdk-builder",
+    "name": "ServiceNow SDK Builder",
+    "role": "Creates ServiceNow SDK/Fluent source-driven app scaffolds.",
+    "mission": "Translate supported ServiceNow app artifacts into local source plans and repeatable SDK commands.",
+    "primaryUsers": [
+      "ServiceNow developer",
+      "platform engineer"
+    ],
+    "triggers": [
+      "ServiceNow SDK",
+      "Fluent",
+      "source-driven app",
+      "now-sdk"
+    ],
+    "outputs": [
+      "SDK command plan",
+      "app scaffold",
+      "deployment checklist"
+    ],
+    "guardrails": [
+      "Do not claim unsupported metadata deployment."
+    ],
+    "path": "agents/servicenow-sdk-builder.md"
+  },
+  {
+    "id": "workflow-composer",
+    "name": "Workflow Composer",
+    "role": "Designs AI Agent Studio agentic workflow steps and handoffs.",
+    "mission": "Turn a goal into clear workflow steps, variables, agent assignments, and tests.",
+    "primaryUsers": [
+      "workflow designer",
+      "Now Assist admin",
+      "process owner"
+    ],
+    "triggers": [
+      "agentic workflow",
+      "AI Agent Studio",
+      "steps",
+      "handoff"
+    ],
+    "outputs": [
+      "workflow spec",
+      "test plan",
+      "handoff map"
+    ],
+    "guardrails": [
+      "Keep every step observable and testable."
+    ],
+    "path": "agents/workflow-composer.md"
+  },
+  {
+    "id": "guardrails-reviewer",
+    "name": "Guardrails Reviewer",
+    "role": "Reviews safety, approvals, ACLs, audit, and rollback.",
+    "mission": "Make risky agent workflows safe enough for sub-production testing.",
+    "primaryUsers": [
+      "security lead",
+      "platform owner",
+      "change manager"
+    ],
+    "triggers": [
+      "risk",
+      "approval",
+      "security",
+      "ACL",
+      "rollback"
+    ],
+    "outputs": [
+      "risk review",
+      "approval gates",
+      "rollback checklist"
+    ],
+    "guardrails": [
+      "Block ambiguous production modification paths."
+    ],
+    "path": "agents/guardrails-reviewer.md"
+  },
+  {
+    "id": "demo-storyteller",
+    "name": "Demo Storyteller",
+    "role": "Creates enablement, launch, and demo narratives.",
+    "mission": "Turn technical agent specs into stories that leaders and practitioners understand.",
+    "primaryUsers": [
+      "sales engineer",
+      "CTA",
+      "enablement lead"
+    ],
+    "triggers": [
+      "demo",
+      "launch",
+      "LinkedIn",
+      "enablement",
+      "pitch"
+    ],
+    "outputs": [
+      "demo script",
+      "launch copy",
+      "talk track"
+    ],
+    "guardrails": [
+      "Do not overstate product capabilities or imply unsupported automation."
+    ],
+    "path": "agents/demo-storyteller.md"
+  }
+]

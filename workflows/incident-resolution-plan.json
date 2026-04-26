@@ -1,0 +1,40 @@
+{
+  "id": "incident-resolution-plan",
+  "name": "Incident Resolution Plan Agentic Workflow",
+  "serviceNowSurface": "AI Agent Studio for plan generation with human approval",
+  "trigger": "Incident enters triage state",
+  "businessOutcome": "Create a consistent resolution plan for incidents while keeping assignment, customer communication, and closure under human control.",
+  "inputs": [
+    "incident number",
+    "short description",
+    "description",
+    "configuration item",
+    "priority",
+    "caller",
+    "assignment group"
+  ],
+  "agents": [
+    "Business Analyst Agent",
+    "Workflow Composer",
+    "Guardrails Reviewer"
+  ],
+  "steps": [
+    "Summarize the incident and missing data.",
+    "Check known issue patterns and related incidents.",
+    "Draft diagnostic steps.",
+    "Recommend assignment group or escalation path.",
+    "Flag VIP, security, and outage indicators.",
+    "Ask for human approval before outbound communication.",
+    "Produce a work note draft and resolution plan."
+  ],
+  "approvalPoints": [
+    "Before changing assignment group",
+    "Before customer-visible communication",
+    "Before closure"
+  ],
+  "tests": [
+    "VIP caller triggers approval.",
+    "Security keyword triggers escalation.",
+    "Missing CI asks for clarification."
+  ]
+}

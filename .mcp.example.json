@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "servicenow-readonly-placeholder": {
+      "command": "node",
+      "args": [
+        "./mcp/servicenow-readonly-server.js"
+      ],
+      "env": {
+        "SERVICENOW_INSTANCE_URL": "https://example.service-now.com",
+        "SERVICENOW_AUTH_PROFILE": "readonly-dev"
+      }
+    }
+  }
+}

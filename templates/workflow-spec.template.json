@@ -1,0 +1,14 @@
+{
+  "id": "example-workflow",
+  "name": "Example Agentic Workflow",
+  "serviceNowSurface": "AI Agent Studio",
+  "trigger": "",
+  "businessOutcome": "",
+  "inputs": [],
+  "agents": [],
+  "steps": [],
+  "approvalPoints": [],
+  "failureStates": [],
+  "auditNotes": [],
+  "tests": []
+}

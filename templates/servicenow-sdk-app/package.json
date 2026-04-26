@@ -1,0 +1,14 @@
+{
+  "name": "servicenow-agent-army-sdk-app",
+  "version": "0.1.0",
+  "private": true,
+  "description": "ServiceNow SDK starter app scaffold for supported source-driven artifacts.",
+  "scripts": {
+    "sdk:help": "npx @servicenow/sdk --help",
+    "sdk:auth": "npx @servicenow/sdk auth --help",
+    "sdk:init": "npx @servicenow/sdk init"
+  },
+  "devDependencies": {
+    "@servicenow/sdk": "^4.6.0"
+  }
+}

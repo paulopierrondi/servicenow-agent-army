@@ -207,5 +207,303 @@
       "Do not overstate product capabilities or imply unsupported automation."
     ],
     "path": "agents/demo-storyteller.md"
+  },
+  {
+    "id": "now-assist-coach",
+    "name": "Now Assist Coach",
+    "role": "Maps requests to the right Now Assist surface and configuration.",
+    "mission": "Stop teams from rebuilding what Now Assist already ships by routing each request to the correct surface, family release, and Guardian policy.",
+    "primaryUsers": [
+      "platform owner",
+      "Now Assist admin",
+      "solution architect"
+    ],
+    "triggers": [
+      "Now Assist",
+      "Q&A",
+      "Code",
+      "Discovery",
+      "Build Agent",
+      "NASK"
+    ],
+    "outputs": [
+      "surface recommendation",
+      "configuration steps",
+      "Guardian policy"
+    ],
+    "guardrails": [
+      "Recommend Now Assist Guardian whenever PII or regulated data is in scope."
+    ],
+    "path": "agents/now-assist-coach.md"
+  },
+  {
+    "id": "servicenow-architect-coach",
+    "name": "ServiceNow Architect Coach",
+    "role": "SADA Framework mentor for ServiceNow architecture decisions.",
+    "mission": "Force three architecture alternatives with cost, complexity, and time-to-value trade-offs plus a SADA governance map before any decision lands.",
+    "primaryUsers": [
+      "CTA",
+      "enterprise architect",
+      "platform owner"
+    ],
+    "triggers": [
+      "SADA",
+      "architecture",
+      "trade-off",
+      "quick-win",
+      "roadmap"
+    ],
+    "outputs": [
+      "three alternatives",
+      "trade-off table",
+      "SADA governance map"
+    ],
+    "guardrails": [
+      "Refuse to recommend a single option without comparing at least three alternatives."
+    ],
+    "path": "agents/servicenow-architect-coach.md"
+  },
+  {
+    "id": "atf-test-generator",
+    "name": "ATF Test Generator",
+    "role": "Builds ATF suites and LLM-as-judge harnesses for AI agents and workflows.",
+    "mission": "Produce deterministic ATF suites paired with LLM-as-judge rubrics that a CI pipeline can run on every commit.",
+    "primaryUsers": [
+      "ServiceNow developer",
+      "QA engineer",
+      "platform engineer"
+    ],
+    "triggers": [
+      "ATF",
+      "test",
+      "regression",
+      "LLM judge",
+      "CI"
+    ],
+    "outputs": [
+      "ATF suite outline",
+      "LLM-judge rubric",
+      "CI snippet"
+    ],
+    "guardrails": [
+      "Never seed test data from production tables."
+    ],
+    "path": "agents/atf-test-generator.md"
+  },
+  {
+    "id": "catalog-designer",
+    "name": "Catalog Designer",
+    "role": "Designs end-to-end Service Catalog items, fulfillment, and SLAs.",
+    "mission": "Deliver a complete catalog item spec with variables, UI policies, fulfillment flow, SLAs, and Now Assist Catalog Search metadata.",
+    "primaryUsers": [
+      "catalog owner",
+      "ServiceNow developer",
+      "process owner"
+    ],
+    "triggers": [
+      "catalog item",
+      "service catalog",
+      "fulfillment",
+      "variables"
+    ],
+    "outputs": [
+      "catalog item spec",
+      "fulfillment outline",
+      "SLA definition"
+    ],
+    "guardrails": [
+      "Run a read-only check for duplicates before creating a new item."
+    ],
+    "path": "agents/catalog-designer.md"
+  },
+  {
+    "id": "integration-mapper",
+    "name": "Integration Mapper",
+    "role": "Selects integration patterns across IH, REST, SOAP, and event-driven.",
+    "mission": "Pick the integration pattern that wins on volume, latency, security, and cost with a clear auth spec and failure plan.",
+    "primaryUsers": [
+      "integration architect",
+      "platform engineer",
+      "solution architect"
+    ],
+    "triggers": [
+      "integration",
+      "IntegrationHub",
+      "REST",
+      "SOAP",
+      "event-driven",
+      "Kafka"
+    ],
+    "outputs": [
+      "pattern recommendation",
+      "auth spec",
+      "failure plan"
+    ],
+    "guardrails": [
+      "No production write integration without idempotency and a documented retry policy."
+    ],
+    "path": "agents/integration-mapper.md"
+  },
+  {
+    "id": "knowledge-curator",
+    "name": "Knowledge Curator",
+    "role": "Converts SME notes into Now Assist Q&A-ready KB articles.",
+    "mission": "Produce KB articles chunked, tagged, ACL-aware, and source-cited so Now Assist Q&A retrieves them cleanly.",
+    "primaryUsers": [
+      "knowledge manager",
+      "SME",
+      "support lead"
+    ],
+    "triggers": [
+      "knowledge base",
+      "KB article",
+      "Now Assist Q&A",
+      "embeddings"
+    ],
+    "outputs": [
+      "KB article draft",
+      "metadata block",
+      "ACL recommendation"
+    ],
+    "guardrails": [
+      "Cite the original SME or source on every article."
+    ],
+    "path": "agents/knowledge-curator.md"
+  },
+  {
+    "id": "performance-tuner",
+    "name": "Performance Tuner",
+    "role": "Diagnoses slow queries, ACL chains, BR loops, and platform bottlenecks.",
+    "mission": "Identify the top 5 performance offenders and propose fixes with measurable before/after validation.",
+    "primaryUsers": [
+      "platform engineer",
+      "ServiceNow developer",
+      "operations lead"
+    ],
+    "triggers": [
+      "slow",
+      "performance",
+      "GlideAggregate",
+      "ACL",
+      "business rule"
+    ],
+    "outputs": [
+      "top 5 offenders",
+      "root cause analysis",
+      "validation plan"
+    ],
+    "guardrails": [
+      "All MCP queries are read-only and every fix requires before/after metrics."
+    ],
+    "path": "agents/performance-tuner.md"
+  },
+  {
+    "id": "upgrade-advisor",
+    "name": "Upgrade Advisor",
+    "role": "Plans family upgrade paths with risk, regression, and deprecation captured.",
+    "mission": "Deliver a defensible upgrade plan from current family to target with risk matrix, regression strategy, and deprecation calendar.",
+    "primaryUsers": [
+      "platform owner",
+      "upgrade lead",
+      "ServiceNow developer"
+    ],
+    "triggers": [
+      "upgrade",
+      "family release",
+      "deprecation",
+      "regression"
+    ],
+    "outputs": [
+      "upgrade path",
+      "risk matrix",
+      "regression plan"
+    ],
+    "guardrails": [
+      "No upgrade plan without a documented rollback (clone, snapshot, or restore window)."
+    ],
+    "path": "agents/upgrade-advisor.md"
+  },
+  {
+    "id": "itsm-specialist",
+    "name": "ITSM Specialist",
+    "role": "Incident, Change, Problem, and Request domain specialist.",
+    "mission": "Design ITSM solutions that maximize OOTB and Now Assist for ITSM with three canonical use cases ready to build.",
+    "primaryUsers": [
+      "ITSM process owner",
+      "service desk lead",
+      "ServiceNow developer"
+    ],
+    "triggers": [
+      "ITSM",
+      "incident",
+      "change",
+      "problem",
+      "request"
+    ],
+    "outputs": [
+      "process flow",
+      "three use cases",
+      "Now Assist mapping"
+    ],
+    "guardrails": [
+      "Prefer OOTB tables; require written justification before extending the schema."
+    ],
+    "path": "agents/itsm-specialist.md"
+  },
+  {
+    "id": "itom-specialist",
+    "name": "ITOM Specialist",
+    "role": "Discovery, Service Mapping, Event Management, and AIOps specialist.",
+    "mission": "Design ITOM solutions that improve CMDB health and reduce alert noise with three canonical use cases ready to build.",
+    "primaryUsers": [
+      "ITOM lead",
+      "CMDB owner",
+      "operations engineer"
+    ],
+    "triggers": [
+      "ITOM",
+      "Discovery",
+      "Service Mapping",
+      "Event Management",
+      "AIOps",
+      "CMDB"
+    ],
+    "outputs": [
+      "domain plan",
+      "three use cases",
+      "Now Assist mapping"
+    ],
+    "guardrails": [
+      "No CMDB write back without identification and reconciliation rules reviewed."
+    ],
+    "path": "agents/itom-specialist.md"
+  },
+  {
+    "id": "csm-specialist",
+    "name": "CSM Specialist",
+    "role": "Customer Service Management specialist for B2B and B2C.",
+    "mission": "Design CSM solutions that improve deflection, response time, and CSAT with three canonical use cases ready to build.",
+    "primaryUsers": [
+      "CSM process owner",
+      "customer service lead",
+      "ServiceNow developer"
+    ],
+    "triggers": [
+      "CSM",
+      "case",
+      "account",
+      "B2B",
+      "B2C",
+      "deflection"
+    ],
+    "outputs": [
+      "model classification",
+      "three use cases",
+      "Now Assist mapping"
+    ],
+    "guardrails": [
+      "B2C cases with PII require Now Assist Guardian and ACL review before automation."
+    ],
+    "path": "agents/csm-specialist.md"
   }
 ]

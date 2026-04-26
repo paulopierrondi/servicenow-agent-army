@@ -1,0 +1,11 @@
+{
+  "name": "@servicenow-agent-army/web",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "echo \"web placeholder — Next.js scaffold pending\" && exit 0",
+    "test": "echo \"web placeholder — no tests yet\" && exit 0",
+    "lint": "echo \"web placeholder — no lint yet\" && exit 0"
+  }
+}

@@ -10,3 +10,31 @@ coverage/
 tmp/
 .servicenow/
 *.tgz
+
+# Private submodule -- never commit
+# Ignore everything under private/ except the two public-repo templates.
+# Note: do NOT use a bare `private/` directory ignore -- git short-circuits
+# directory ignores and the negations below would never apply.
+/private/*
+!/private/README.md.template
+!/private/.gitkeep.example
+.private/
+*.pierrondi.local
+
+# Memory exports -- never commit
+memory/
+**/claude-export.md
+**/chatgpt-export.json
+**/personal-memory/
+
+# Audit logs from MCP servers
+.audit/
+*.audit.jsonl
+
+# Local environment
+.env.local
+.env.*.local
+
+# Build artifacts
+.turbo/
+*.tsbuildinfo

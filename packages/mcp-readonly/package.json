@@ -1,0 +1,37 @@
+{
+  "name": "@servicenow-agent-army/mcp-readonly",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Read-only ServiceNow MCP server (discovery). No write paths in the binary by construction.",
+  "main": "./dist/server.js",
+  "bin": {
+    "mcp-sn-readonly": "./dist/server.js"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/server.d.ts",
+      "import": "./dist/server.js"
+    },
+    "./tools": {
+      "types": "./dist/tools/index.d.ts",
+      "import": "./dist/tools/index.js"
+    }
+  },
+  "files": ["dist", "README.md"],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "vitest run",
+    "lint": "biome check src tests"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.4",
+    "zod": "^3.23.8",
+    "zod-to-json-schema": "^3.23.5"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "typescript": "^5.6.3",
+    "vitest": "^2.1.8"
+  }
+}

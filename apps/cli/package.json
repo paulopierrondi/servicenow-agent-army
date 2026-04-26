@@ -1,0 +1,11 @@
+{
+  "name": "@servicenow-agent-army/cli",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "echo \"cli placeholder — Commander scaffold pending\" && exit 0",
+    "test": "echo \"cli placeholder — no tests yet\" && exit 0",
+    "lint": "echo \"cli placeholder — no lint yet\" && exit 0"
+  }
+}

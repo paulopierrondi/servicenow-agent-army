@@ -1,0 +1,89 @@
+# servicenow-agent-army-private
+
+Private submodule for personal expertise overlay on ServiceNow Agent Army.
+
+**This README is a template** -- copy to your private repo as `README.md` and fill the placeholders.
+
+## Owner
+
+- Name: <Your full name>
+- Role: <e.g. TAE FSI Brazil at ServiceNow>
+- Contact: <work email or handle>
+
+## What lives here
+
+- Personal Claude memory exports (`memory/claude-export.md`)
+- Personal ChatGPT memory exports (`memory/chatgpt-export.json`)
+- Manual notes and decisions (`memory/notes/`)
+- Personal agent card (`agents/<your-id>-enterprise-architect.md`)
+- MCP server for local RAG over memory (`packages/mcp-<your-id>-memory/`)
+- Private skill consumed by Claude Code / Codex CLI (`.claude/skills/<your-id>-ea/SKILL.md`)
+- Local MCP registration (`.mcp.json`)
+
+## Setup
+
+1. **Clone next to the public repo**
+
+   ```bash
+   git clone git@github.com:<your-handle>/servicenow-agent-army-private.git
+   cd servicenow-agent-army-private
+   ```
+
+2. **Install MCP server**
+
+   ```bash
+   cd packages/mcp-<your-id>-memory
+   npm install
+   npm run build
+   ```
+
+3. **Ingest memory**
+
+   Drop Claude/ChatGPT exports under `memory/`. Run the ingest script (see AGE-1200) to chunk and embed. Embeddings stay local.
+
+4. **Mount into the public repo**
+
+   From the public `servicenow-agent-army/` checkout:
+
+   ```bash
+   git submodule add git@github.com:<your-handle>/servicenow-agent-army-private.git private
+   ```
+
+   Or symlink without a submodule binding:
+
+   ```bash
+   ln -s <absolute-path-to-private-clone> ../servicenow-agent-army/private
+   ```
+
+5. **Verify Claude Code picks up the private skill**
+
+   Open the public repo in Claude Code. Run `/claude skills` and confirm `<your-id>-ea` is listed.
+
+6. **Verify the MCP server is registered**
+
+   Run `/mcp list` in Claude Code. Confirm `<your-id>-memory` is connected over stdio.
+
+## Sanitization
+
+Every output from the digital twin must pass the sanitizer in `packages/mcp-<your-id>-memory/src/sanitizer.ts` before being surfaced. Stages:
+
+1. Regex strip (CPF, CNPJ, email, phone BR, IP, BRL values, project codes)
+2. Named entity allowlist (default deny)
+3. LLM-as-judge second pass
+4. Hard fail returns `{ error: "redacted" }`
+
+Always read the final output before pasting into a client-facing channel. The sanitizer is defense-in-depth, not a substitute for review.
+
+## Privacy
+
+- This repo must remain private. Confirm `gh repo view --json visibility` returns `PRIVATE` before pushing.
+- Never copy memory files into the public repo. The public `.gitignore` blocks `private/` and `memory/` but a misplaced file outside those paths will commit.
+- Rotate audit logs at `.audit/` weekly.
+- Review `.gitignore` before every commit. The included template covers `node_modules/`, `dist/`, `.env*`, `.audit/`, `*.log`.
+- Personal memory exports may include third-party PII. Check your employer's DLP policy before storing them, even locally.
+
+## Related
+
+- Public repo: `servicenow-agent-army`
+- Pattern docs: `docs/private-submodule-setup.md` in the public repo
+- Linear issues: AGE-1199 (architecture), AGE-1200 (memory pipeline), AGE-1201 (MCP server + sanitizer)

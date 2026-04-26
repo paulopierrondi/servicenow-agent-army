@@ -1,0 +1,41 @@
+{
+  "name": "@servicenow-agent-army/mcp-write",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Write-with-guardrails ServiceNow MCP server. Dry-run -> approval token -> audit -> rollback.",
+  "main": "./dist/server.js",
+  "bin": {
+    "mcp-sn-write": "./dist/server.js"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/server.d.ts",
+      "import": "./dist/server.js"
+    },
+    "./tools": {
+      "types": "./dist/tools/index.d.ts",
+      "import": "./dist/tools/index.js"
+    },
+    "./approval-token": {
+      "types": "./dist/lib/approval-token.d.ts",
+      "import": "./dist/lib/approval-token.js"
+    }
+  },
+  "files": ["dist", "README.md"],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "vitest run",
+    "lint": "biome check src tests"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.4",
+    "zod": "^3.23.8",
+    "zod-to-json-schema": "^3.23.5"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "typescript": "^5.6.3",
+    "vitest": "^2.1.8"
+  }
+}

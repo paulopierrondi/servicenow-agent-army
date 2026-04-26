@@ -5,9 +5,17 @@
   "description": "Prompt-first starter kit for creating ServiceNow AI agents, workflows, skills, and SDK scaffolds with Codex and Claude Agent SDK.",
   "type": "module",
   "license": "MIT",
+  "packageManager": "pnpm@9.12.0",
+  "engines": {
+    "node": ">=22.0.0"
+  },
   "scripts": {
     "validate": "node scripts/validate-catalog.mjs",
-    "new:agent": "node scripts/new-agent.mjs"
+    "new:agent": "node scripts/new-agent.mjs",
+    "build": "turbo run build",
+    "test": "turbo run test",
+    "lint": "biome check .",
+    "format": "biome format --write ."
   },
   "keywords": [
     "servicenow",
@@ -21,8 +29,10 @@
   ],
   "devDependencies": {
     "@anthropic-ai/claude-agent-sdk": "^0.2.119",
+    "@biomejs/biome": "^1.9.4",
     "@openai/agents": "^0.8.5",
     "@openai/codex-sdk": "^0.125.0",
-    "@servicenow/sdk": "^4.6.0"
+    "@servicenow/sdk": "^4.6.0",
+    "turbo": "^2.3.0"
   }
 }

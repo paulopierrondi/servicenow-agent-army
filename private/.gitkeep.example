@@ -1,0 +1,16 @@
+# Private Submodule Mount Point
+
+This directory is intentionally empty in the public repo.
+
+If you have access to the `servicenow-agent-army-private` repo, mount it here as a git submodule:
+
+  git submodule add git@github.com:paulopierrondi/servicenow-agent-army-private.git private
+
+Or clone independently and symlink:
+
+  git clone git@github.com:paulopierrondi/servicenow-agent-army-private.git ~/code/sa-army-private
+  ln -s ~/code/sa-army-private private
+
+The `private/` path is in `.gitignore` so it never leaks into the public repo.
+
+See `docs/private-submodule-setup.md` for the full pattern.

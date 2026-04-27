@@ -1,6 +1,6 @@
 # ServiceNow Agent Army
 
-> Council plus working app for the ServiceNow community. A battalion of specialist advisors, two MCP servers, and a knowledge base that help you build AI agents, GenAI skills, and agentic workflows on the platform — wired for Claude Agent SDK, Codex CLI, and ServiceNow SDK 4.6+ Fluent.
+> Council plus working app for the ServiceNow community, led by **Pierrondi EA** — the value-first advisor that refuses to draw architecture before the value question is answered. Twenty specialist advisors, two MCP servers, and a knowledge base wired for Claude Agent SDK, Codex CLI, and ServiceNow SDK 4.6+ Fluent.
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Node 22 LTS](https://img.shields.io/badge/node-22%20LTS-339933.svg?logo=node.js&logoColor=white)](https://nodejs.org/)
@@ -12,12 +12,27 @@
 
 Now Assist, AI Agent Studio, NASK and AI Control Tower keep shipping new surfaces every family release. Builders end up with three problems: too many places to start, no consistent governance, and zero feedback loop for design quality. ServiceNow Agent Army is a public, MIT-licensed kit that gives you a curated council of advisors, two MCP servers with real guardrails, and a body of opinionated knowledge so the next agent or workflow you ship survives a CAB review and an internal audit.
 
+## Meet Pierrondi EA
+
+Most ServiceNow advice is theater. Decks, target-state diagrams, "north star" architecture without a number attached. **Pierrondi EA** is the headliner of this army and the reason the council moves at the right altitude. Every Pierrondi EA response carries the same shape, no exceptions:
+
+| Block | Question it answers |
+| --- | --- |
+| Outcome (90 days) | What metric changes? One direction, one number. |
+| Value | What is it worth? Currency figure with stated trade-off. |
+| Deliverables | What ships? Who owns each item? When? |
+| Risks and mitigations | What kills it? Where do we stop? Three max with go/no-go thresholds. |
+
+If any block is missing or weak, Pierrondi EA stops and asks. It does not draw boxes to be helpful. Once the value question is answered, the rest of the army follows: BA captures requirements, CTA frames boundaries, Workflow Composer drafts steps, Guardrails Reviewer locks the approval flow.
+
+Brand brief and the four-block contract: [`docs/pierrondi-ea-positioning.md`](docs/pierrondi-ea-positioning.md). Card: [`agents/pierrondi-enterprise-architect.md`](agents/pierrondi-enterprise-architect.md).
+
 ## What it does
 
 - Generates AI Agent Studio agent specs, validated workflow JSON, ATF test outlines, and Now Assist Skill Kit prompts in under two minutes from a business outcome.
 - Wraps every production write behind dry-run, signed approval token, append-only audit, and per-record rollback through a write-side MCP server (see ADR-002).
 - Ships a read-only MCP server for schema discovery, AI Agent Studio metadata browsing, and active-flow inventory without burning a Now Assist credit.
-- Gives you 19 advisor prompts plus the SADA Framework, anti-patterns, and best-practice guides for ITSM, ITOM, CSM, and Now Assist.
+- Gives you 20 advisor prompts (led by **Pierrondi EA**, the value-first headliner) plus the SADA Framework, anti-patterns, and best-practice guides for ITSM, ITOM, CSM, and Now Assist.
 
 ## Who it helps
 
@@ -25,10 +40,11 @@ Now Assist, AI Agent Studio, NASK and AI Control Tower keep shipping new surface
 - **Presales engineer / SC:** assemble a defensible demo with three architecture alternatives, trade-offs, and a SADA governance map in the time it takes to make coffee.
 - **Technical Account Executive / Architect:** prepare account plans that align Now Assist roadmap, FSI compliance posture, and quick wins, then hand a clean spec to the platform team.
 
-## The Agent Army (19 advisors)
+## The Agent Army (20 advisors)
 
 | Group | Advisors | Primary output |
 | --- | --- | --- |
+| **Headliner** | **Pierrondi EA** | Outcome, value, deliverables, risks (the four-block contract) |
 | Strategy & architecture | CTA, Enterprise Architect, ServiceNow Architect Coach (SADA) | Three alternatives, trade-off table, ADR |
 | Discovery & design | Business Analyst, Workflow Composer, Catalog Designer, Integration Mapper | Requirements, AI Agent Studio steps, catalog spec, integration pattern |
 | Build & test | ServiceNow SDK Builder, ATF Test Generator, Knowledge Curator | Fluent scaffold, ATF suite + LLM-judge rubric, KB articles |
@@ -224,9 +240,13 @@ No Codex CLI:
 codex run "Use the servicenow-agent-factory skill to draft a CMDB Health Check agentic workflow with guardrails."
 ```
 
+### Pierrondi EA — o headliner
+
+A maior parte do conselho que se vende como "arquitetura" e teatro. Slides, north star, sem numero. **Pierrondi EA** entra primeiro e nao desenha nada antes de fechar quatro blocos: outcome em 90 dias (uma metrica), valor (em R$, com trade-off), entregas (3-5 com dono e prazo) e riscos (max 3 com go/no-go). Se algum bloco esta fraco, ele para e pergunta. So depois o resto do batalhao segue. Brand brief: [`docs/pierrondi-ea-positioning.md`](docs/pierrondi-ea-positioning.md).
+
 ### O batalhao em 1 paragrafo
 
-19 advisors organizados em seis grupos: estrategia e arquitetura (CTA, EA, SADA Coach), discovery e design (BA, Workflow Composer, Catalog Designer, Integration Mapper), build e test (SDK Builder, ATF Test Generator, Knowledge Curator), especialistas de dominio (ITSM, ITOM, CSM, Now Assist Coach), operacoes (Performance Tuner, Upgrade Advisor) e governanca/comunicacao (Guardrails Reviewer, Token Saver Specialist, Demo Storyteller). Cada advisor tem missao, guardrail e output bem definidos em [`catalog/agents.json`](catalog/agents.json).
+20 advisors organizados em sete grupos: headliner (Pierrondi EA), estrategia e arquitetura (CTA, EA, SADA Coach), discovery e design (BA, Workflow Composer, Catalog Designer, Integration Mapper), build e test (SDK Builder, ATF Test Generator, Knowledge Curator), especialistas de dominio (ITSM, ITOM, CSM, Now Assist Coach), operacoes (Performance Tuner, Upgrade Advisor) e governanca/comunicacao (Guardrails Reviewer, Token Saver Specialist, Demo Storyteller). Cada advisor tem missao, guardrail e output bem definidos em [`catalog/agents.json`](catalog/agents.json).
 
 ### Nao afiliado
 

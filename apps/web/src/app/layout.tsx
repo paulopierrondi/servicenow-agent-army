@@ -15,7 +15,7 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "ServiceNow Agent Army",
   description:
-    "A council of 19 advisors that turns a one-line ServiceNow problem into AI Agent Studio specs, workflow JSON, ATF tests, and Now Assist Skill Kit prompts.",
+    "Twenty advisors led by Pierrondi EA — the value-first headliner. Outcome before output. Turns a one-line ServiceNow problem into AI Agent Studio specs, workflow JSON, ATF tests, and Now Assist Skill Kit prompts.",
   metadataBase: new URL("https://servicenow-agent-army.vercel.app"),
   openGraph: {
     title: "ServiceNow Agent Army",

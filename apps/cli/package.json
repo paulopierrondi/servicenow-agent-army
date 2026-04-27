@@ -1,11 +1,43 @@
 {
-  "name": "@servicenow-agent-army/cli",
-  "version": "0.0.0",
-  "private": true,
+  "name": "servicenow-army",
+  "version": "0.1.0",
+  "description": "CLI for the ServiceNow Agent Army - scaffold agents, validate catalogs, and run the advisory council on ServiceNow problems.",
+  "license": "MIT",
   "type": "module",
+  "bin": {
+    "servicenow-army": "./dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
   "scripts": {
-    "build": "echo \"cli placeholder — Commander scaffold pending\" && exit 0",
-    "test": "echo \"cli placeholder — no tests yet\" && exit 0",
-    "lint": "echo \"cli placeholder — no lint yet\" && exit 0"
+    "build": "tsup",
+    "dev": "tsx src/index.ts",
+    "start": "node dist/cli.js",
+    "lint": "echo \"cli - lint via root biome\" && exit 0",
+    "test": "echo \"cli - no tests yet\" && exit 0"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "keywords": [
+    "servicenow",
+    "ai-agents",
+    "cli",
+    "agentic-workflows",
+    "now-assist",
+    "fluent"
+  ],
+  "dependencies": {
+    "citty": "^0.1.6",
+    "consola": "^3.4.2",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.5",
+    "tsup": "^8.3.5",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.3"
   }
 }

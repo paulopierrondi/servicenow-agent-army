@@ -1,0 +1,50 @@
+{
+  "id": "aiops-noise-reduction-workflow",
+  "name": "AIOps Noise Reduction Workflow (phased)",
+  "serviceNowSurface": "Event Management cleanup phase plus Now Assist for AIOps activation phase",
+  "trigger": "ITOM lead initiates the noise reduction program",
+  "businessOutcome": "Bring the NOC alert-to-incident noise ratio to a level where dashboards are trustworthy, so the operator team stops bypassing the platform with client-side filters.",
+  "inputs": [
+    "Event Rules baseline",
+    "alert volume telemetry",
+    "Service Mapping coverage",
+    "known seasonality calendar"
+  ],
+  "agents": [
+    "itom-specialist",
+    "performance-tuner",
+    "workflow-composer",
+    "guardrails-reviewer"
+  ],
+  "steps": [
+    "Phase 1: read Event Rules and alert volume; identify redundant or superseded rules.",
+    "Phase 1: surface event sources without a health-check probe.",
+    "Phase 1: retire redundant Event Rules via update set with ITOM lead approval; add health checks.",
+    "Phase 2: collect a 90-day clean baseline; do not activate AIOps yet.",
+    "Phase 2: define exclusion windows for month-end, payroll, and other seasonality.",
+    "Phase 3: activate Now Assist AIOps anomaly detection in shadow mode; compare against operator-confirmed incidents.",
+    "Phase 3: promote to active after 4 weeks of NOC operator sign-off."
+  ],
+  "approvalPoints": [
+    "ITOM lead approval to retire each Event Rule batch",
+    "Platform owner approval to enter phase 3",
+    "NOC operator sign-off before active mode"
+  ],
+  "failureStates": [
+    "Baseline window not yet 90 days: phase 3 blocks with a clear message and remaining-days counter.",
+    "Anomaly detection produces high false-positive rate (>20 percent on shadow data): block active promotion and feed the seasonality list.",
+    "Event source health check fails: source quarantined, alerts not auto-promoted to incidents until source recovers."
+  ],
+  "auditNotes": [
+    "Event Rule retirement update set retained.",
+    "Baseline evidence (alert volume per source per day) archived for one year.",
+    "AIOps activation event recorded in AI Control Tower."
+  ],
+  "tests": [
+    "Phase 3 blocked with under 90 days baseline.",
+    "Synthetic seasonality spike on payroll day does not surface as anomaly when in exclusion window.",
+    "Forged event from non-whitelisted source rejected.",
+    "Alert without Service Map binding does not auto-create an incident.",
+    "Final noise ratio target met on synthetic 90-day replay."
+  ]
+}

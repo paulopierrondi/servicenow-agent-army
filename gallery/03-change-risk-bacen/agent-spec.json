@@ -1,0 +1,63 @@
+{
+  "id": "change-risk-recommender-fsi",
+  "name": "Change Risk Recommender (FSI Brazil)",
+  "businessOutcome": "Cut CAB review time on Normal changes in a tier-1 Brazilian bank by surfacing a transparent risk score and rationale, with zero auto-approve on high-risk items and a written audit trail aligned to BACEN.",
+  "targetUsers": [
+    "change manager",
+    "CAB member",
+    "platform owner"
+  ],
+  "serviceNowSurface": "Now Assist Change Risk Recommendation, with a custom display panel inside the change form showing rationale and history",
+  "role": "Augments the change manager with a model-grounded risk recommendation plus a plain-language rationale, never deciding autonomously on high-risk or BACEN-bound CIs.",
+  "responsibilities": [
+    "Score each Normal change with a risk band (low, medium, high) and a confidence",
+    "Cite up to three historical changes that informed the score",
+    "Surface the active blackout window and any conflict with PIX or BACEN cycles",
+    "Display structured override field; reject free-text overrides"
+  ],
+  "inputs": [
+    "change.short_description",
+    "change.cmdb_ci",
+    "change.implementation_plan",
+    "change.start_date and end_date",
+    "Risk Conditions current version",
+    "Blackout windows (machine-readable)"
+  ],
+  "outputs": [
+    "risk band with confidence",
+    "rationale paragraph in pt-BR",
+    "top three similar past changes with outcome",
+    "blackout-window conflict flag",
+    "override field with required structured fields"
+  ],
+  "toolsOrPlatformActions": [
+    "Now Assist Change Risk Recommendation (OOTB)",
+    "change_request and incident historical read",
+    "cmdb_ci read for criticality lookup",
+    "Risk Conditions evaluation"
+  ],
+  "mustNotDo": [
+    "Auto-approve any high-risk change",
+    "Auto-approve any change touching a CI marked BACEN-critical",
+    "Allow free-text override; only structured-field override accepted",
+    "Send recommendations outside the CAB without approval"
+  ],
+  "approvalGates": [
+    "Manual approval mandatory for high-risk band, no exception",
+    "Risk Reviewer sign-off on Risk Conditions changes",
+    "Platform Owner sign-off before promoting from shadow mode to active"
+  ],
+  "auditRequirements": [
+    "sn_aia_execution_* records reconciled against change_request weekly",
+    "Override events logged with structured justification, retrievable in 24 hours per BACEN 4.893",
+    "Quarterly review of override rate; if above 15 percent, halt active mode and review"
+  ],
+  "rollbackPlan": "Revert to manual change risk via a single configuration toggle. Preserve the last 90 days of recommendations for audit. If the issue is on the Risk Conditions revision, revert the update set and run regression on the next CAB cycle.",
+  "tests": [
+    "Synthetic change matching a historical incident-causing pattern surfaces high-risk band",
+    "Change inside a blackout window blocks auto-approve regardless of band",
+    "Free-text override attempt rejected by UI policy",
+    "Override rate stays below 15 percent in a 60-change shadow set",
+    "Audit retrieval rehearsal completes within 24 hours"
+  ]
+}

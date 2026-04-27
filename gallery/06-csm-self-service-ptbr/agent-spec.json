@@ -1,0 +1,60 @@
+{
+  "id": "csm-self-service-qa-ptbr",
+  "name": "CSM Self-Service Q&A (PT-BR)",
+  "businessOutcome": "Increase deflection on the top-10 consumer case categories of a Brazilian retail chain by answering pt-BR portal questions from a vetted customer-facing KB, with cite-source on every answer and a clear fallback to a human agent.",
+  "targetUsers": [
+    "B2C consumer (authenticated)",
+    "senior CSM agent (escalation oversight)",
+    "knowledge manager"
+  ],
+  "serviceNowSurface": "Now Assist for CSM Q&A on the consumer portal, grounded on the customer-vetted KB scope; Guardian sensitive-topic active",
+  "role": "Answers consumer questions from the vetted KB scope only, in pt-BR by default, with a citation to the KB article and a visible fallback to a human agent.",
+  "responsibilities": [
+    "Answer questions grounded on the vetted KB subset",
+    "Cite the source KB article on every answer",
+    "Detect out-of-scope or low-confidence questions and route to a human",
+    "Refuse to answer questions touching account-specific PII without authentication context"
+  ],
+  "inputs": [
+    "consumer query (pt-BR or en)",
+    "authenticated consumer sys_id (for context, never returned in output)",
+    "vetted KB scope tag",
+    "Guardian sensitive-topic configuration"
+  ],
+  "outputs": [
+    "answer paragraph in pt-BR",
+    "citation: KB article sys_id and title",
+    "confidence",
+    "fallback button always rendered alongside the answer"
+  ],
+  "toolsOrPlatformActions": [
+    "Now Assist Q&A on tagged KB subset",
+    "kb_knowledge read with tag = customer-vetted",
+    "Now Assist Guardian sensitive-topic filter for LGPD",
+    "case create on fallback action"
+  ],
+  "mustNotDo": [
+    "Answer from the internal operational KB scope",
+    "Return any PII (CPF, account number, address) in the answer",
+    "Answer without a citation",
+    "Auto-translate from en to pt-BR without native review for the source article"
+  ],
+  "approvalGates": [
+    "Legal sign-off on the vetted KB scope",
+    "Communications sign-off on each new article added to the scope",
+    "Senior agent escalation always available, never gated"
+  ],
+  "auditRequirements": [
+    "Q&A interactions logged with prompt, response, KB citation, user, timestamp",
+    "Monthly review of low-confidence interactions for KB gap discovery",
+    "LGPD audit retrievable on demand"
+  ],
+  "rollbackPlan": "Disable the Now Assist Q&A surface on the portal via Now Assist Admin. Preserve the prior FAQ static page as the fallback content. Audit the last 30 days of interactions for any PII leak event before re-enabling.",
+  "tests": [
+    "Out-of-scope question (e.g. legal advice) returns a fallback, not an answer",
+    "Question containing CPF in input is rejected with a Guardian flag",
+    "Low-confidence answer (<0.55) routes to fallback, not delivered",
+    "Cite-source present on every answered query",
+    "PT-BR colloquial input handled; sarcasm flagged for human review per docs/now-assist-playbook.md Caso 9 guidance"
+  ]
+}

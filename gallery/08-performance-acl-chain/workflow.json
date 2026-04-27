@@ -1,0 +1,49 @@
+{
+  "id": "case-list-perf-fix-workflow",
+  "name": "Case List Performance Fix Workflow",
+  "serviceNowSurface": "ServiceNow platform diagnostics; no Now Assist surface activated",
+  "trigger": "Platform engineer initiates a performance diagnostic cycle on the case table list view",
+  "businessOutcome": "Bring the case list view p95 below 1.2 seconds via structural fixes, with before-after validation on prod-equivalent sub-prod data.",
+  "inputs": [
+    "case table schema and ACL chain",
+    "Business Rule list with order",
+    "list filter usage telemetry",
+    "current p95 latency"
+  ],
+  "agents": [
+    "performance-tuner",
+    "enterprise-architect-agent",
+    "servicenow-architect-coach"
+  ],
+  "steps": [
+    "Capture the current p95 latency baseline.",
+    "Run read-only ACL and Business Rule diagnostics.",
+    "Surface the top 5 offenders with root-cause analysis.",
+    "Propose fixes with before-after measurement plan; reject any fix without a measurement plan.",
+    "Apply each fix in its own update set in sub-prod.",
+    "Validate before-after metrics on prod-equivalent volume.",
+    "Promote to prod with a 7-day post-fix monitoring window."
+  ],
+  "approvalPoints": [
+    "Each fix update set requires a sign-off",
+    "Operations lead sign-off on the rollout window",
+    "Enterprise Architect Agent sign-off on cross-table changes"
+  ],
+  "failureStates": [
+    "Diagnostic returns no offender above the noise threshold: workflow halts and asks for a different reproduction case.",
+    "Fix worsens p95 in sub-prod: revert update set; restart from diagnostics with new data.",
+    "DBA flags index proposal as unsafe: hold and seek a non-index alternative."
+  ],
+  "auditNotes": [
+    "Before-after metrics archived for one year.",
+    "Fix update sets retained.",
+    "Decision to NOT add Now Assist surface recorded with rationale."
+  ],
+  "tests": [
+    "p95 below 1.2 seconds achieved on prod-equivalent sub-prod.",
+    "Before-after metrics present for every fix.",
+    "Update set backout rehearsal succeeds.",
+    "Workflow does not propose any Now Assist surface.",
+    "PA snapshot diff shows the offender removed."
+  ]
+}

@@ -1,0 +1,235 @@
+[
+  {
+    "id": "incident-triage-fsi",
+    "title": "Incident triage with Now Assist for ITSM (FSI Brazil)",
+    "domain": "ITSM",
+    "personaUsed": "service desk analyst",
+    "agentsParticipated": [
+      "business-analyst-agent",
+      "cta-agent",
+      "itsm-specialist",
+      "now-assist-coach",
+      "guardrails-reviewer"
+    ],
+    "nowAssistSurface": "Now Assist for ITSM (Resolution Suggestion + Incident Summarization)",
+    "summary": "Routes P1/P2 incidents in a tier-1 Brazilian bank with Now Assist resolution suggestions and Guardian sensitive-topic filters for LGPD-bound PII. Aimed at trimming time-to-assignment, not replacing human triage.",
+    "outcomeMetric": "Target: 40 percent reduction in p95 time-to-assignment within 90 days, measured on assignment_group != Service Desk handoff. Hypothesis based on docs/best-practices/itsm.md Resolution Suggestion guidance.",
+    "guardrailHighlights": [
+      "Now Assist Guardian sensitive-topic filter mandatory for incidents tagged with PII or credit data",
+      "Manual approval before any auto-close on credit-related incidents",
+      "Audit trail in sn_aia_execution_* validated quarterly per BACEN 4.893"
+    ],
+    "path": "gallery/01-incident-triage-fsi/",
+    "submittedBy": "ServiceNow Agent Army team",
+    "submittedAt": "2026-04-26"
+  },
+  {
+    "id": "cmdb-health-quarterly",
+    "title": "Quarterly CMDB health and remediation plan",
+    "domain": "ITOM",
+    "personaUsed": "platform owner",
+    "agentsParticipated": [
+      "business-analyst-agent",
+      "cta-agent",
+      "enterprise-architect-agent",
+      "itom-specialist",
+      "workflow-composer"
+    ],
+    "nowAssistSurface": "AI Agent Studio with read-only CMDB analysis; ATF for regression coverage",
+    "summary": "Produces a prioritized CMDB remediation plan for a global manufacturer LATAM with 80k CIs across hybrid cloud and on-prem. Read-only by design; no write goes out without change control.",
+    "outcomeMetric": "Target: lift CMDB completeness score from 62 to 80 percent in two quarters; reduce duplicate CIs by 25 percent. Hypothesis grounded in docs/best-practices/itom.md Identification & Reconciliation guidance.",
+    "guardrailHighlights": [
+      "All MCP queries read-only",
+      "Zero CMDB writes without identification rule review and approval",
+      "Cross-class write actions require Enterprise Architect Agent sign-off"
+    ],
+    "path": "gallery/02-cmdb-health-quarterly/",
+    "submittedBy": "ServiceNow Agent Army team",
+    "submittedAt": "2026-04-26"
+  },
+  {
+    "id": "change-risk-bacen",
+    "title": "Change risk recommendation under BACEN constraints",
+    "domain": "ITSM",
+    "personaUsed": "change manager",
+    "agentsParticipated": [
+      "business-analyst-agent",
+      "enterprise-architect-agent",
+      "servicenow-architect-coach",
+      "itsm-specialist",
+      "guardrails-reviewer"
+    ],
+    "nowAssistSurface": "Now Assist Change Risk Recommendation",
+    "summary": "Adds GenAI-driven change risk scoring on Normal changes for a tier-1 Brazilian bank, with manual override audit and blackout windows aligned to BACEN month-end and PIX maintenance. Three SADA-compliant alternatives evaluated before this one was selected.",
+    "outcomeMetric": "Target: 30 percent reduction in CAB review time on Normal changes; zero auto-approve for high-risk classes. Hypothesis grounded in docs/best-practices/itsm.md Change section and docs/now-assist-playbook.md Caso 4.",
+    "guardrailHighlights": [
+      "Never auto-approve high-risk changes",
+      "Manual override requires structured justification field, not free text",
+      "Blackout windows for BACEN reporting cycles enforced before recommendation"
+    ],
+    "path": "gallery/03-change-risk-bacen/",
+    "submittedBy": "ServiceNow Agent Army team",
+    "submittedAt": "2026-04-26"
+  },
+  {
+    "id": "catalog-laptop-refresh",
+    "title": "Laptop refresh catalog item with Now Assist Catalog Search",
+    "domain": "Platform",
+    "personaUsed": "catalog owner",
+    "agentsParticipated": [
+      "business-analyst-agent",
+      "catalog-designer",
+      "workflow-composer",
+      "atf-test-generator"
+    ],
+    "nowAssistSurface": "Now Assist Catalog Search",
+    "summary": "Designs a dependent-variable laptop refresh catalog item for a Brazilian retail chain with 12k employees, fulfillment to a regional logistics partner, and ATF coverage for the variable matrix. Catalog Search semantic intent rather than keyword.",
+    "outcomeMetric": "Target: 25 percent shift from incident-as-request to catalog submission within 60 days; SLA breach rate below 5 percent. Hypothesis grounded in docs/best-practices/itsm.md Service Catalog section.",
+    "guardrailHighlights": [
+      "Read-only check for duplicate catalog items before publishing",
+      "UI policies for dependent variables, not Client Scripts",
+      "ATF suite blocks merge if variable matrix coverage drops"
+    ],
+    "path": "gallery/04-catalog-laptop-refresh/",
+    "submittedBy": "ServiceNow Agent Army team",
+    "submittedAt": "2026-04-26"
+  },
+  {
+    "id": "discovery-noise-aiops",
+    "title": "Event Management noise reduction with Now Assist for AIOps",
+    "domain": "ITOM",
+    "personaUsed": "NOC operator",
+    "agentsParticipated": [
+      "itom-specialist",
+      "performance-tuner",
+      "workflow-composer",
+      "guardrails-reviewer"
+    ],
+    "nowAssistSurface": "Now Assist for AIOps (alert correlation summarization)",
+    "summary": "Cuts alert flood for a global manufacturer LATAM NOC by tightening Event Rules, validating Service Mapping, and only then layering Now Assist AIOps. Calls out that AI on a noisy baseline produces noisier dashboards.",
+    "outcomeMetric": "Target: noise ratio below 30 percent within 90 days after a clean three-month baseline. Hypothesis grounded in docs/best-practices/itom.md Event Management section.",
+    "guardrailHighlights": [
+      "AIOps anomaly detection only after three months of clean baseline",
+      "Exclusion windows for known seasonality (month-end, payroll)",
+      "Source whitelist on event ingestion to prevent forged events"
+    ],
+    "path": "gallery/05-discovery-noise-aiops/",
+    "submittedBy": "ServiceNow Agent Army team",
+    "submittedAt": "2026-04-26"
+  },
+  {
+    "id": "csm-self-service-ptbr",
+    "title": "PT-BR self-service Q&A for CSM portal",
+    "domain": "CSM",
+    "personaUsed": "B2C consumer",
+    "agentsParticipated": [
+      "business-analyst-agent",
+      "csm-specialist",
+      "knowledge-curator",
+      "now-assist-coach",
+      "guardrails-reviewer"
+    ],
+    "nowAssistSurface": "Now Assist for CSM Q&A in PT-BR with curated KB scope",
+    "summary": "Stands up a Portuguese-first Q&A on the customer portal of a Brazilian retail chain. Curated KB scope, Guardian sensitive-topic for LGPD, and a clear escalation to a human when the model is not confident.",
+    "outcomeMetric": "Target: deflection ratio from 15 to 30 percent in 90 days on top-10 case categories. Working hypothesis aligned to docs/now-assist-playbook.md Caso 12 and docs/best-practices/csm.md self-service section.",
+    "guardrailHighlights": [
+      "Now Assist Guardian sensitive-topic filter mandatory on PII",
+      "Cite-source on every generated answer",
+      "Native PT-BR human review on KB before publication; no auto-translate"
+    ],
+    "path": "gallery/06-csm-self-service-ptbr/",
+    "submittedBy": "ServiceNow Agent Army team",
+    "submittedAt": "2026-04-26"
+  },
+  {
+    "id": "knowledge-from-confluence",
+    "title": "KB ingestion from legacy Confluence with grounded Q&A",
+    "domain": "Platform",
+    "personaUsed": "knowledge manager",
+    "agentsParticipated": [
+      "knowledge-curator",
+      "now-assist-coach",
+      "guardrails-reviewer",
+      "integration-mapper"
+    ],
+    "nowAssistSurface": "Now Assist Q&A grounded on curated KB scope",
+    "summary": "Migrates 1,200 Confluence pages into ServiceNow KB for a global manufacturer LATAM, with chunking, ACL mapping, and SME citation. Anti-pattern flagged: do not ship Q&A on a KB you have not yet curated.",
+    "outcomeMetric": "Target: 250 articles published with SME citation in 60 days; Q&A precision above 85 percent on a 50-question gold set. Hypothesis aligned to docs/best-practices/now-assist.md Surface 1 and docs/now-assist-playbook.md Caso 2.",
+    "guardrailHighlights": [
+      "Cite original SME or source on every article",
+      "Guardian baseline plus sensitive-topic on HR-adjacent content",
+      "ACL recommendation produced per article, never default-public"
+    ],
+    "path": "gallery/07-knowledge-from-confluence/",
+    "submittedBy": "ServiceNow Agent Army team",
+    "submittedAt": "2026-04-26"
+  },
+  {
+    "id": "performance-acl-chain",
+    "title": "ACL chain performance fix without Now Assist",
+    "domain": "Platform",
+    "personaUsed": "platform engineer",
+    "agentsParticipated": [
+      "performance-tuner",
+      "enterprise-architect-agent",
+      "servicenow-architect-coach"
+    ],
+    "nowAssistSurface": "None — structural fix; Now Assist deliberately not used",
+    "summary": "Diagnoses a 7-second list-load on the case table caused by recursive ACL evaluation and a chained Business Rule. The council recommends not adding Now Assist on top of a slow platform; fix the ACL chain first.",
+    "outcomeMetric": "Target: list load p95 below 1.2 seconds after fix, validated with before-after metrics. Hypothesis grounded in docs/best-practices/now-assist.md anti-patterns and standard ACL chain guidance.",
+    "guardrailHighlights": [
+      "All performance MCP queries read-only",
+      "Every fix requires before-after metrics in writing",
+      "No Now Assist surface added until p95 returns to baseline"
+    ],
+    "path": "gallery/08-performance-acl-chain/",
+    "submittedBy": "ServiceNow Agent Army team",
+    "submittedAt": "2026-04-26"
+  },
+  {
+    "id": "upgrade-yokohama-zurich",
+    "title": "Yokohama to Zurich upgrade plan with regression coverage",
+    "domain": "Platform",
+    "personaUsed": "upgrade lead",
+    "agentsParticipated": [
+      "upgrade-advisor",
+      "atf-test-generator",
+      "workflow-composer",
+      "enterprise-architect-agent"
+    ],
+    "nowAssistSurface": "Now Assist for Code (developer accelerator during the upgrade)",
+    "summary": "Plans the Yokohama-to-Zurich family upgrade for a tier-1 Brazilian bank with a hardened ATF regression suite, an LLM-as-judge harness for Now Assist behavior changes, and a documented rollback window. Now Assist for Code accelerates the developer team but does not replace test gates.",
+    "outcomeMetric": "Target: zero P1 regressions in first two weeks post-cutover; rollback verified once in sub-prod. Hypothesis grounded in standard ServiceNow upgrade practice and docs/sada-framework.md anti-pattern 10.",
+    "guardrailHighlights": [
+      "No upgrade plan without a documented and tested rollback",
+      "Guardian regression test before promoting any AI agent across families",
+      "ATF suite must pass with Yokohama-equivalent dataset before cutover"
+    ],
+    "path": "gallery/09-upgrade-yokohama-zurich/",
+    "submittedBy": "ServiceNow Agent Army team",
+    "submittedAt": "2026-04-26"
+  },
+  {
+    "id": "vendor-performance-review",
+    "title": "Quarterly vendor performance review (agentic, read-only tools)",
+    "domain": "CSM",
+    "personaUsed": "vendor manager",
+    "agentsParticipated": [
+      "business-analyst-agent",
+      "workflow-composer",
+      "knowledge-curator",
+      "guardrails-reviewer"
+    ],
+    "nowAssistSurface": "AI Agent Studio agent with read-only Table API tool whitelist",
+    "summary": "Compresses a two-week vendor review cycle into a one-day draft for a global manufacturer LATAM procurement team. Demonstrates the agentic pattern correctly: read-only tool whitelist, structured summarization skill, human approval before any penalty action.",
+    "outcomeMetric": "Target: review cycle from 10 business days to 2; zero auto-actioned penalties. Hypothesis aligned to docs/now-assist-playbook.md Caso 11.",
+    "guardrailHighlights": [
+      "Tool whitelist read-only across vendor, contracts, incidents, SLAs",
+      "Human approval mandatory before any contract or penalty change",
+      "Audit log preserved for procurement audit and contract dispute"
+    ],
+    "path": "gallery/10-vendor-performance-review/",
+    "submittedBy": "ServiceNow Agent Army team",
+    "submittedAt": "2026-04-26"
+  }
+]

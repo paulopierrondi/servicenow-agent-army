@@ -1,0 +1,51 @@
+{
+  "id": "incident-triage-fsi-workflow",
+  "name": "Incident Triage Coach Workflow (FSI Brazil)",
+  "serviceNowSurface": "Now Assist for ITSM domain skill orchestrated inside Agent Workspace, with Flow Designer for any write action",
+  "trigger": "Incident created or updated and state in (1=New, 2=In Progress) and Tier 1 ownership",
+  "businessOutcome": "Provide the Tier 1 analyst with a triage panel that suggests category, assignment group, top KB articles, and a summary, so the human can act in two minutes instead of seven, without any auto-action on credit-related cases.",
+  "inputs": [
+    "incident sys_id",
+    "caller language preference",
+    "scope tag (itsm-resolution KB subset)",
+    "PII detection rules"
+  ],
+  "agents": [
+    "business-analyst-agent",
+    "itsm-specialist",
+    "now-assist-coach",
+    "guardrails-reviewer",
+    "workflow-composer"
+  ],
+  "steps": [
+    "Read incident fields with PII fields masked client-side before sending to the model.",
+    "Run PII and credit-data heuristic; if hit, set guardian_flag = true and route to Guardian sensitive-topic check.",
+    "Call Now Assist Resolution Suggestion against the itsm-resolution KB scope; capture top three with confidence.",
+    "Call Now Assist Incident Summarization for a one-paragraph hand-off note.",
+    "Render the triage panel inside Agent Workspace with citations, confidence, and a clear escalate-to-human button.",
+    "Log the suggestion event to sn_aia_execution_* with prompt, response, user, and timestamp.",
+    "On analyst acceptance, write the chosen category and assignment_group via Flow Designer subflow with approval policy."
+  ],
+  "approvalPoints": [
+    "Before any state change on credit-related incidents",
+    "Before promoting any KB scope expansion from sub-prod to prod",
+    "Before turning on Auto-close behaviour on any category"
+  ],
+  "failureStates": [
+    "Now Assist domain skill returns no suggestion above the confidence floor: panel falls back to manual triage and logs a low-confidence event.",
+    "Guardian sensitive-topic filter blocks the prompt: panel surfaces a sanitized version and asks the analyst to proceed manually.",
+    "KB scope returns zero results: panel marks the incident as KB-gap candidate for the Knowledge Curator backlog."
+  ],
+  "auditNotes": [
+    "All AI events recorded to sn_aia_execution_* and reconciled with sys_gen_ai_log_metadata weekly.",
+    "Quarterly review board (Platform + Risk + Service Desk lead) signs off on precision and credit-burn metrics.",
+    "Owner of record: a named Service Desk Manager (CPF and email). Reassignment plan in place if owner changes."
+  ],
+  "tests": [
+    "Empty short_description returns a clarification request and zero suggestions.",
+    "Synthetic credit-dispute incident triggers guardian_flag and blocks any auto-action.",
+    "Resolution Suggestion precision on the 100-incident gold set exceeds 70 percent.",
+    "Latency p95 of the panel below 4 seconds end-to-end on sub-prod with prod-equivalent volume.",
+    "Audit log retrieval rehearsal completes within 24 hours."
+  ]
+}

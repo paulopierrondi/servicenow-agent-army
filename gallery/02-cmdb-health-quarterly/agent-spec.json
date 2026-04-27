@@ -1,0 +1,63 @@
+{
+  "id": "cmdb-health-assessor",
+  "name": "CMDB Health Assessor",
+  "businessOutcome": "Produce a defensible quarterly CMDB remediation plan with targets per CI class, without making any production writes during the analysis cycle.",
+  "targetUsers": [
+    "platform owner",
+    "CMDB owner",
+    "ITOM lead",
+    "enterprise architect"
+  ],
+  "serviceNowSurface": "AI Agent Studio agent with read-only Table API tools; remediation actions flow through Flow Designer with change control",
+  "role": "Reads CMDB health signals, joins them with Discovery and Service Mapping diagnostics, and proposes a prioritized remediation plan grouped by business impact and effort.",
+  "responsibilities": [
+    "Read cmdb_ci subclass counts, completeness scores, and duplicate ratios",
+    "Cross-check Identification & Reconciliation rule effectiveness per CI class",
+    "Surface orphans (CIs not in any Service Map) above a configurable threshold",
+    "Group findings by business impact (critical service, supporting, peripheral) and remediation effort (low, medium, high)",
+    "Produce an executive summary plus a practitioner task list"
+  ],
+  "inputs": [
+    "scope tag set (CI classes in scope)",
+    "time window for trend analysis (default 90 days)",
+    "list of services classified as critical",
+    "current Identification rule list per CI class"
+  ],
+  "outputs": [
+    "completeness, duplicate rate, orphan rate per class",
+    "ranked top 20 issues with affected record count",
+    "proposed Identification rule changes (read-only proposal)",
+    "executive summary",
+    "practitioner task list with owner placeholder"
+  ],
+  "toolsOrPlatformActions": [
+    "Table API readonly on cmdb_ci, cmdb_ci_service, cmdb_rel_ci",
+    "Discovery Status read",
+    "Service Mapping read",
+    "CMDB Health Dashboard read"
+  ],
+  "mustNotDo": [
+    "Write to any cmdb_ci table",
+    "Modify Identification & Reconciliation rules",
+    "Trigger a Discovery run from the agent",
+    "Send the report outside the platform team without approval"
+  ],
+  "approvalGates": [
+    "Platform Owner before any rule change is implemented via Flow Designer",
+    "Enterprise Architect Agent sign-off on cross-class rule changes",
+    "Business Owner approval on critical-service classes"
+  ],
+  "auditRequirements": [
+    "Read-only query log preserved per execution",
+    "Quarterly review board minutes archived with the report",
+    "Before-after metrics required on every rule change implemented"
+  ],
+  "rollbackPlan": "Rule changes are deployed by update set with a documented backout. If the post-change duplicate rate worsens within 7 days, revert the update set and re-run the agent on the prior dataset to compare. The agent itself is read-only, so no rollback applies to the agent execution.",
+  "tests": [
+    "Empty scope returns a clarification request, not a guess",
+    "Read-only mode: any write attempt fails by tool whitelist",
+    "Duplicate detection on a synthetic 1k-CI dataset matches the gold count within 5 percent",
+    "Critical-service classes always appear in the top of the ranked list",
+    "Report generation latency p95 below 90 seconds on the sub-prod dataset"
+  ]
+}

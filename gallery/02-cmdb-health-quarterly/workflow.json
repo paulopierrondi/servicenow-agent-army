@@ -1,0 +1,52 @@
+{
+  "id": "cmdb-health-quarterly-workflow",
+  "name": "Quarterly CMDB Health Assessment Workflow",
+  "serviceNowSurface": "AI Agent Studio with read-only CMDB analysis; Flow Designer subflows for any write action with approval",
+  "trigger": "Scheduled quarterly or manual assessment request from a platform owner",
+  "businessOutcome": "Help the platform team identify CMDB health issues per CI class and create a prioritized remediation plan that respects change control and avoids any direct CMDB write from the agent.",
+  "inputs": [
+    "scope (CI classes)",
+    "time window",
+    "known exception rules",
+    "critical-service list"
+  ],
+  "agents": [
+    "business-analyst-agent",
+    "cta-agent",
+    "enterprise-architect-agent",
+    "itom-specialist",
+    "workflow-composer"
+  ],
+  "steps": [
+    "Capture assessment scope, target CI classes, and critical-service list.",
+    "Read CMDB Health Dashboard signals and Discovery Status indicators within the scope.",
+    "Cross-check Identification & Reconciliation rule effectiveness per class.",
+    "Surface orphans by joining cmdb_ci against cmdb_ci_service.",
+    "Group issues by business impact and remediation effort with affected record counts.",
+    "Draft a remediation plan, separating read-only fixes from rule-change proposals.",
+    "Route any rule change to a Flow Designer subflow with Platform Owner approval.",
+    "Produce an executive summary and a practitioner task list with owner placeholders."
+  ],
+  "approvalPoints": [
+    "Before any CMDB record update",
+    "Before any Identification rule change",
+    "Before sending the report outside the platform team"
+  ],
+  "failureStates": [
+    "Empty scope: agent returns a clarification request and does not proceed.",
+    "Tool returns more than the configured row cap: agent paginates and logs the cap event for review.",
+    "Service Mapping data missing: agent flags the class as not eligible for orphan detection and continues with the others."
+  ],
+  "auditNotes": [
+    "Read-only mode enforced by tool whitelist; any write attempt is logged and blocked.",
+    "Quarterly review board minutes archived alongside the report.",
+    "Before-after metrics mandatory on every rule change implemented post-review."
+  ],
+  "tests": [
+    "Empty scope returns clarification request.",
+    "Read-only mode produces recommendations but no writes.",
+    "High-risk class changes require approval and cannot be auto-applied.",
+    "Synthetic 1k-CI duplicate dataset surfaces all duplicates within 5 percent.",
+    "Report generation under 90 seconds p95 on sub-prod."
+  ]
+}

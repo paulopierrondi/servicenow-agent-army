@@ -1,0 +1,62 @@
+{
+  "id": "incident-triage-coach-fsi",
+  "name": "Incident Triage Coach (FSI Brazil)",
+  "businessOutcome": "Reduce p95 time-to-assignment on incidents in a tier-1 Brazilian bank by routing classification suggestions and KB-grounded resolution hints to Tier 1 analysts, while keeping credit-related incidents under manual approval.",
+  "targetUsers": [
+    "service desk analyst Tier 1",
+    "service desk team lead",
+    "incident manager"
+  ],
+  "serviceNowSurface": "Now Assist for ITSM (Resolution Suggestion + Incident Summarization) inside Agent Workspace",
+  "role": "Augments a human analyst by surfacing the top three KB-grounded resolution suggestions and a one-paragraph incident summary, never deciding alone on customer-facing actions.",
+  "responsibilities": [
+    "Read incident short_description, description, and CI binding to suggest category and assignment_group",
+    "Surface top three KB articles with citation and confidence band",
+    "Generate a one-paragraph incident summary on hand-off between tiers",
+    "Flag incidents that match PII or credit-data heuristics for Guardian sensitive-topic review"
+  ],
+  "inputs": [
+    "incident.short_description",
+    "incident.description",
+    "incident.cmdb_ci",
+    "incident.caller_id (PII fields masked client-side)",
+    "kb_knowledge tagged subset for ITSM categories"
+  ],
+  "outputs": [
+    "category and sub-category recommendation with confidence",
+    "assignment_group recommendation with confidence",
+    "top three KB articles with link and one-line rationale",
+    "incident summary paragraph",
+    "PII or credit-data flag for Guardian"
+  ],
+  "toolsOrPlatformActions": [
+    "Now Assist for ITSM Resolution Suggestion (OOTB)",
+    "Now Assist for ITSM Incident Summarization (OOTB)",
+    "kb_knowledge read with tag filter set to itsm-resolution",
+    "Now Assist Guardian sensitive-topic filter"
+  ],
+  "mustNotDo": [
+    "Auto-close any incident",
+    "Auto-resolve credit-related or PIX-related incidents without manual approval",
+    "Read kb_knowledge outside the itsm-resolution tag scope",
+    "Write to incident table directly; only Flow Designer with approval can write"
+  ],
+  "approvalGates": [
+    "Manual approval before any auto-close on credit-related incidents",
+    "Platform Owner sign-off before promoting from sub-prod to prod",
+    "Risk Reviewer sign-off on Guardian sensitive-topic configuration"
+  ],
+  "auditRequirements": [
+    "sn_aia_execution_* records retrievable within 24 hours per BACEN 4.893",
+    "sys_gen_ai_log_metadata reviewed monthly for PII leakage",
+    "Quarterly review of top-3 suggestion precision on a stratified sample"
+  ],
+  "rollbackPlan": "Disable the Now Assist for ITSM domain skill via Now Assist Admin in the impacted scope. Roll back the KB tagging update set. Document the disable event in the AI Control Tower. Audit the last 24 hours of suggestions for any auto-action and reconcile manually.",
+  "tests": [
+    "Empty short_description returns a clarification request, not a guess",
+    "Incident tagged credit_dispute requires manual approval before any state change",
+    "Resolution Suggestion precision on a 100-incident gold set above 70 percent before promotion",
+    "Guardian sensitive-topic blocks a synthetic CPF-bearing comment in sub-prod",
+    "Audit log retrieval simulation completes within 24 hours"
+  ]
+}

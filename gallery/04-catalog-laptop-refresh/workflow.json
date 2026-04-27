@@ -1,0 +1,51 @@
+{
+  "id": "laptop-refresh-fulfillment-workflow",
+  "name": "Laptop Refresh Fulfillment Workflow",
+  "serviceNowSurface": "Service Catalog item plus Flow Designer fulfillment subflow; Now Assist Catalog Search at the entry surface",
+  "trigger": "sc_request created against the laptop refresh catalog item",
+  "businessOutcome": "Move from incident-as-request to a clean catalog flow: collect requirements through dependent variables, route fulfillment with explicit dependencies, and meet SLAs without manual hand-offs.",
+  "inputs": [
+    "sc_req_item sys_id",
+    "department reference",
+    "role",
+    "store size",
+    "peripheral selection"
+  ],
+  "agents": [
+    "business-analyst-agent",
+    "catalog-designer",
+    "workflow-composer",
+    "atf-test-generator"
+  ],
+  "steps": [
+    "Validate variable completeness and reject submission if any required dependent variable is missing.",
+    "Resolve laptop SKU based on role and store size via UI Policy-derived rules.",
+    "Create the hardware allocation Catalog Task assigned to inventory.",
+    "On allocation completion, create the imaging Catalog Task assigned to image team.",
+    "On imaging completion, create the shipping Catalog Task assigned to the regional logistics partner.",
+    "Apply item-specific SLA per task; notify requester at each transition.",
+    "Close the request and write structured closure data including SKU and lead time."
+  ],
+  "approvalPoints": [
+    "Manager approval for power-user SKU",
+    "Fulfillment lead approval on out-of-policy peripheral combinations",
+    "Catalog owner approval before re-publishing after a variable change"
+  ],
+  "failureStates": [
+    "Required variable missing: form blocks submission with a UI Policy message.",
+    "Imaging team SLA breach: Catalog Task escalates and a notification is sent to fulfillment lead.",
+    "Logistics partner returns failure: shipping Catalog Task reopens and notifies requester."
+  ],
+  "auditNotes": [
+    "Update set retained with item and subflow.",
+    "ATF suite results archived per release.",
+    "SLA breach data tracked in Performance Analytics."
+  ],
+  "tests": [
+    "Submission with all required variables produces three Catalog Tasks in correct order.",
+    "Submission missing department is blocked at the form.",
+    "Power-user SKU triggers manager approval before allocation.",
+    "Logistics failure reopens the shipping task without losing prior task data.",
+    "ATF suite runs green before merge."
+  ]
+}

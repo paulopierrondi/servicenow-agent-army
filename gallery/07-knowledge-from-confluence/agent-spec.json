@@ -1,0 +1,60 @@
+{
+  "id": "kb-curator-from-confluence",
+  "name": "KB Curator (Confluence ingestion)",
+  "businessOutcome": "Migrate the kept and merged Confluence content into ServiceNow KB with chunking, SME citation, and ACL recommendations, and only then enable Now Assist Q&A on the curated scope.",
+  "targetUsers": [
+    "knowledge manager",
+    "SME (per article)",
+    "platform owner"
+  ],
+  "serviceNowSurface": "ServiceNow KB plus Now Assist Q&A grounded on curated scope; Integration Hub for the one-shot export from Confluence",
+  "role": "Triage Confluence content, propose keep/merge/retire decisions, produce import-ready KB drafts with chunking and metadata, and recommend ACLs.",
+  "responsibilities": [
+    "Triage Confluence pages with read-only metadata (last edit, author, view count)",
+    "Propose keep / merge / retire per page with rationale",
+    "Produce import-ready KB drafts with chunking suitable for embeddings",
+    "Cite the original SME and source page on every draft",
+    "Recommend ACL per article; default to private unless justified"
+  ],
+  "inputs": [
+    "Confluence space exports (HTML or markdown)",
+    "page metadata (last edit, author, view count)",
+    "SME mapping table",
+    "ACL policy reference"
+  ],
+  "outputs": [
+    "triage list (keep / merge / retire) with rationale",
+    "KB article drafts with metadata block",
+    "ACL recommendations per article",
+    "merge groups with target draft mapping"
+  ],
+  "toolsOrPlatformActions": [
+    "kb_knowledge create via update set",
+    "Integration Hub Confluence export (one-shot)",
+    "kb_knowledge_base read for existing content overlap detection"
+  ],
+  "mustNotDo": [
+    "Migrate stale pages (no edit in 18 months) without SME re-validation",
+    "Set ACL to public-read by default",
+    "Drop SME citation",
+    "Auto-publish; every draft awaits SME approval"
+  ],
+  "approvalGates": [
+    "SME approval per article before publication",
+    "Knowledge manager sign-off on the merge groups",
+    "Platform owner sign-off before activating Now Assist Q&A on the curated scope"
+  ],
+  "auditRequirements": [
+    "Mapping from Confluence page sys_id to KB article sys_id retained",
+    "Triage decisions retained with rationale and reviewer",
+    "Now Assist Q&A activation event recorded in AI Control Tower"
+  ],
+  "rollbackPlan": "If post-activation Q&A precision drops below 85 percent on the gold set, narrow the scope to a smaller curated subset and re-run the SME review. Keep the original Confluence export for one year as a recovery source.",
+  "tests": [
+    "Stale page (no edit in 18 months) is not migrated without SME re-validation",
+    "Every draft has at least one SME citation",
+    "Default ACL is private; public-read requires justification",
+    "Q&A precision on the 50-question gold set exceeds 85 percent before activation",
+    "Merge group drafts do not duplicate content of the kept articles"
+  ]
+}

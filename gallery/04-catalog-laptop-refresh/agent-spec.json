@@ -1,0 +1,62 @@
+{
+  "id": "laptop-refresh-catalog-curator",
+  "name": "Laptop Refresh Catalog Curator",
+  "businessOutcome": "Reduce the volume of incidents that should have been catalog requests by deploying a clean, dependent-variable laptop refresh item with Now Assist Catalog Search semantic intent and ATF regression coverage.",
+  "targetUsers": [
+    "catalog owner",
+    "service desk lead",
+    "fulfillment lead"
+  ],
+  "serviceNowSurface": "Service Catalog item with Now Assist Catalog Search; Flow Designer subflow for fulfillment; ATF for regression",
+  "role": "Designs and maintains the laptop refresh catalog item end to end: variable spec, dependent UI policies, fulfillment tasks, SLAs, and Now Assist Catalog Search metadata.",
+  "responsibilities": [
+    "Run duplicate-item check before publishing",
+    "Design dependent variables with UI Policies",
+    "Map fulfillment to three Catalog Tasks with explicit dependencies",
+    "Define item-specific SLAs distinct from generic catalog SLAs",
+    "Author Now Assist Catalog Search-friendly description and metadata"
+  ],
+  "inputs": [
+    "list of laptop SKUs",
+    "department reference set (cmn_department.sys_id)",
+    "fulfillment partner SLAs",
+    "existing catalog items in scope for duplicate check"
+  ],
+  "outputs": [
+    "catalog item spec with variables and UI policies",
+    "fulfillment subflow outline",
+    "SLA definition",
+    "Now Assist Catalog Search metadata block",
+    "ATF regression suite outline"
+  ],
+  "toolsOrPlatformActions": [
+    "sc_cat_item read for duplicate detection",
+    "Service Catalog item create via update set",
+    "Flow Designer subflow for fulfillment",
+    "Now Assist Catalog Search metadata configuration"
+  ],
+  "mustNotDo": [
+    "Use Client Scripts for dependent variables; UI Policies only",
+    "Create the item with free-text department field",
+    "Skip the duplicate-item check",
+    "Deploy without ATF coverage"
+  ],
+  "approvalGates": [
+    "Catalog owner sign-off on variable matrix",
+    "Fulfillment lead sign-off on Catalog Task dependencies and SLAs",
+    "Platform owner before promoting to prod"
+  ],
+  "auditRequirements": [
+    "Update set retained with item creation history",
+    "ATF run history archived",
+    "Now Assist Catalog Search ranking validated weekly for the first 60 days"
+  ],
+  "rollbackPlan": "Backout via the publishing update set and re-enable the previous laptop items if the new one is found to break fulfillment. ATF acts as the early warning if a variable change breaks adjacent items.",
+  "tests": [
+    "Duplicate-item check surfaces existing laptop items before create",
+    "ATF suite covers all dependent-variable combinations and passes",
+    "Now Assist Catalog Search ranks the item top 3 for 'preciso de notebook' and equivalents",
+    "SLA breach rate stays below 5 percent on the first 100 fulfilled requests",
+    "No adjacent catalog item regressions in ATF after deploy"
+  ]
+}

@@ -1,0 +1,59 @@
+{
+  "id": "case-list-perf-fixer",
+  "name": "Case List Performance Fixer",
+  "businessOutcome": "Restore the case list view p95 below 1.2 seconds in a tier-1 Brazilian bank by removing structural offenders in the ACL chain and Business Rule graph, without adding any Now Assist surface to mask the latency.",
+  "targetUsers": [
+    "platform engineer",
+    "operations lead",
+    "enterprise architect"
+  ],
+  "serviceNowSurface": "ServiceNow platform diagnostics; no Now Assist activation in scope",
+  "role": "Diagnose performance offenders on the case table list view, propose fixes with before-after validation, and reject AI-based mitigations that mask the structural cause.",
+  "responsibilities": [
+    "Run read-only performance diagnostics on ACL chain and Business Rule graph",
+    "Surface unindexed fields used in list filters",
+    "Propose fixes with before-after validation plan",
+    "Refuse to recommend a Now Assist surface as a workaround for a structural performance problem"
+  ],
+  "inputs": [
+    "case table schema and ACL list",
+    "Business Rule list with execution order",
+    "list filter usage telemetry",
+    "current p95 list-view latency"
+  ],
+  "outputs": [
+    "top 5 offenders with root-cause analysis",
+    "fix proposals with before-after metric plan",
+    "negative recommendation: no Now Assist surface added"
+  ],
+  "toolsOrPlatformActions": [
+    "sys_db_object read",
+    "sys_security_acl read",
+    "sys_script (Business Rule) read",
+    "sys_db_index read"
+  ],
+  "mustNotDo": [
+    "Recommend Now Assist Case Summarization to mask list-view latency",
+    "Modify ACLs without before-after benchmark",
+    "Drop indexes without explicit DBA approval",
+    "Run any diagnostic that writes to a table"
+  ],
+  "approvalGates": [
+    "Platform engineer sign-off on each fix proposal",
+    "Operations lead sign-off on the rollout window",
+    "Enterprise Architect Agent sign-off on cross-table changes"
+  ],
+  "auditRequirements": [
+    "Before-after metrics archived for one year",
+    "Fix update sets retained",
+    "PA dashboard snapshots before and after each fix"
+  ],
+  "rollbackPlan": "Each fix is shipped via its own update set with a documented backout. If a post-fix p95 worsens within 7 days, revert the update set and re-run diagnostics. PA snapshots are the source of truth for rollback decisions.",
+  "tests": [
+    "Synthetic recursive ACL pattern flagged by diagnostics",
+    "Business Rule using current.update() inside another BR flagged",
+    "Unindexed list-filter field flagged",
+    "Before-after p95 measurement plan present on every fix proposal",
+    "No Now Assist surface present in any output of this agent"
+  ]
+}

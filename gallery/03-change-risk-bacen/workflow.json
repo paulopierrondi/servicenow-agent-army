@@ -1,0 +1,52 @@
+{
+  "id": "change-risk-bacen-workflow",
+  "name": "Change Risk Recommendation Workflow (BACEN-aware)",
+  "serviceNowSurface": "Now Assist Change Risk Recommendation surfaced in the change form with a custom rationale panel",
+  "trigger": "change_request type=Normal moves to Assess state",
+  "businessOutcome": "Give the change manager a transparent, history-grounded risk band with rationale and conflict flags, so the CAB spends time on the changes that need debate, not on rubber-stamping.",
+  "inputs": [
+    "change_request sys_id",
+    "current Risk Conditions version",
+    "blackout calendar",
+    "BACEN-critical CI list"
+  ],
+  "agents": [
+    "business-analyst-agent",
+    "enterprise-architect-agent",
+    "servicenow-architect-coach",
+    "itsm-specialist",
+    "guardrails-reviewer"
+  ],
+  "steps": [
+    "Read change fields and the linked CI criticality.",
+    "Evaluate Risk Conditions and blackout windows; if hit, set hard_block = true.",
+    "Call Now Assist Change Risk Recommendation; capture band, confidence, and rationale.",
+    "Pull the top three similar historical changes with outcome (success, rolled back, caused incident).",
+    "Render the rationale panel inside the change form with band, confidence, citations, and override field.",
+    "If override is set, validate structured fields are filled; reject if any free text.",
+    "Log the recommendation event with prompt, response, user, timestamp.",
+    "Route to CAB queue with the recommendation visible; never auto-approve high-risk."
+  ],
+  "approvalPoints": [
+    "CAB review mandatory for high-risk and any blackout conflict",
+    "Risk Reviewer sign-off before any Risk Conditions revision",
+    "Quarterly board review of override rate"
+  ],
+  "failureStates": [
+    "Now Assist Change Risk returns no result: panel falls back to manual assessment with a flag.",
+    "Confidence below the configured floor (0.55): panel shows the band as advisory only.",
+    "Free-text override attempt: UI policy blocks save and instructs the user to fill structured fields."
+  ],
+  "auditNotes": [
+    "Recommendations and overrides retrievable within 24 hours per BACEN 4.893.",
+    "Quarterly board reviews override rate; above 15 percent halts active mode.",
+    "Owner of record: a named change manager (CPF and email)."
+  ],
+  "tests": [
+    "Synthetic high-risk change forces CAB review regardless of confidence.",
+    "Blackout-window change cannot be auto-approved.",
+    "Free-text override attempts are rejected.",
+    "Override rate in 60-change shadow set stays under 15 percent.",
+    "Audit retrieval rehearsal completes within 24 hours."
+  ]
+}

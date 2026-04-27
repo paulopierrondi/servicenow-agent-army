@@ -1,0 +1,51 @@
+{
+  "id": "kb-from-confluence-workflow",
+  "name": "Confluence to KB Curated Migration Workflow",
+  "serviceNowSurface": "Integration Hub one-shot export plus KB authoring; Now Assist Q&A activation on curated scope",
+  "trigger": "Knowledge manager initiates a migration cycle",
+  "businessOutcome": "Move from a noisy 1200-page Confluence to a curated KB scope of ~250 articles with SME citation, suitable for grounding Now Assist Q&A.",
+  "inputs": [
+    "Confluence space export",
+    "page metadata",
+    "SME mapping",
+    "ACL policy"
+  ],
+  "agents": [
+    "knowledge-curator",
+    "now-assist-coach",
+    "guardrails-reviewer",
+    "integration-mapper"
+  ],
+  "steps": [
+    "Run a one-shot Confluence export (Integration Hub) into a staging area.",
+    "Triage pages: keep (clear owner + recent + non-duplicate), merge (multiple pages on the same topic), retire (stale or duplicated).",
+    "For keep: produce KB drafts with chunking and metadata; SME citation mandatory.",
+    "For merge: produce a single draft from the source group; cite all SMEs and source pages.",
+    "For retire: archive the original metadata and rationale; do not import.",
+    "Set ACL recommendations per article; default private until justified.",
+    "SME approves drafts in batches; knowledge manager approves the final scope.",
+    "Activate Now Assist Q&A on the curated scope only after the gold-set precision passes."
+  ],
+  "approvalPoints": [
+    "SME approval per article",
+    "Knowledge manager approval of merge groups",
+    "Platform owner sign-off on Now Assist Q&A activation"
+  ],
+  "failureStates": [
+    "Stale page without SME contact: marked retire by default; flagged for re-validation later if needed.",
+    "Merge group with conflicting content: blocked at SME review; surfaced for resolution.",
+    "Gold-set precision below 85 percent: Q&A activation blocked; scope narrowed."
+  ],
+  "auditNotes": [
+    "Mapping table from Confluence to KB retained.",
+    "Triage decisions retained with reviewer name and rationale.",
+    "Q&A activation event recorded in AI Control Tower."
+  ],
+  "tests": [
+    "Stale page without SME does not enter the keep set.",
+    "Merge group drafts do not duplicate keep articles.",
+    "Default ACL is private.",
+    "Gold-set precision validation runs before activation.",
+    "Audit retrieval of mapping and decisions completes within one business day."
+  ]
+}

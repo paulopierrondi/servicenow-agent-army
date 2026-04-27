@@ -1,0 +1,51 @@
+{
+  "id": "vendor-performance-review-workflow",
+  "name": "Quarterly Vendor Performance Review Workflow",
+  "serviceNowSurface": "AI Agent Studio agent with read-only tools; NASK summarization skill; human approval gate",
+  "trigger": "Scheduled quarterly or on-demand from a vendor manager",
+  "businessOutcome": "Produce a structured quarterly vendor performance draft per strategic vendor in one business day, ready for human refinement, without any direct write or auto-action.",
+  "inputs": [
+    "vendor sys_id list",
+    "quarter window",
+    "review template",
+    "contract scope tag"
+  ],
+  "agents": [
+    "business-analyst-agent",
+    "workflow-composer",
+    "knowledge-curator",
+    "guardrails-reviewer"
+  ],
+  "steps": [
+    "Load the vendor list and quarter window.",
+    "For each vendor, read incidents linked to vendor CIs in the window.",
+    "Read change_request records linked to vendor changes in the window.",
+    "Read SLA breaches and contract metadata in scope.",
+    "Run the NASK summarization skill with structured output for the five review fields.",
+    "Aggregate into a comparison table across the quarter.",
+    "Produce recommended actions with required human approval flag.",
+    "Log all read events and the draft creation event."
+  ],
+  "approvalPoints": [
+    "Procurement lead sign-off before draft becomes the official starting point",
+    "Legal review on any recommended action that touches contract terms",
+    "Human approval mandatory before any contract or penalty change"
+  ],
+  "failureStates": [
+    "Tool returns more than the row cap: paginate; if still excessive, mark vendor as partial_scan and surface for manual review.",
+    "Contract not in scope tag: skip and log the skip event; do not attempt cross-scope read.",
+    "NASK skill returns malformed output: retry once; on second failure, mark vendor as failed_summary and surface for manual review."
+  ],
+  "auditNotes": [
+    "All read events logged with prompt, response, user, timestamp.",
+    "Structured drafts retained per quarter for procurement audit.",
+    "Owner of record: a named vendor manager (CPF and email)."
+  ],
+  "tests": [
+    "Write attempt by the agent fails by tool whitelist.",
+    "Comparison table renders all 40 vendors with five structured fields each.",
+    "Penalty recommendation never auto-executes; always awaits human approval.",
+    "Cross-scope contract read attempt blocked.",
+    "Audit retrieval rehearsal completes within one business day."
+  ]
+}

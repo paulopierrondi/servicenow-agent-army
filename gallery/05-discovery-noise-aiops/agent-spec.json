@@ -1,0 +1,62 @@
+{
+  "id": "aiops-noise-reducer",
+  "name": "AIOps Noise Reducer",
+  "businessOutcome": "Cut the alert-to-incident noise ratio for a global manufacturer LATAM NOC by tightening Event Rules first, then layering Now Assist AIOps once the baseline is clean for three months.",
+  "targetUsers": [
+    "NOC operator",
+    "ITOM lead",
+    "platform owner"
+  ],
+  "serviceNowSurface": "Now Assist for AIOps (alert correlation summarization) on top of OOTB Event Management; Performance Analytics dashboards",
+  "role": "Reads Event Rules, alert volume, and Service Mapping coverage to propose a cleanup plan and only then layers anomaly detection and correlation summarization.",
+  "responsibilities": [
+    "Identify redundant or superseded Event Rules with read-only diagnostics",
+    "Surface event sources without a health check",
+    "Recommend exclusion windows for known seasonality (month-end, payroll)",
+    "Propose alert correlation rules grounded in Service Mapping topology",
+    "Activate Now Assist AIOps anomaly detection only after a 3-month clean baseline"
+  ],
+  "inputs": [
+    "Event Rules current set",
+    "alert volume per source per day",
+    "Service Mapping coverage report",
+    "known seasonality windows"
+  ],
+  "outputs": [
+    "list of redundant Event Rules with rationale",
+    "list of event sources without health check",
+    "proposed correlation rules with topology reference",
+    "exclusion-window proposal",
+    "AIOps activation readiness score"
+  ],
+  "toolsOrPlatformActions": [
+    "em_event_rule read",
+    "em_alert read with aggregation",
+    "cmdb_ci_service read for Service Map binding",
+    "sn_aiops anomaly detection configuration (post-baseline)"
+  ],
+  "mustNotDo": [
+    "Activate AIOps anomaly detection before a 3-month clean baseline",
+    "Disable Event Rules without explicit ITOM lead approval",
+    "Add new event sources without a health check",
+    "Auto-create incidents from alerts without Service Map binding"
+  ],
+  "approvalGates": [
+    "ITOM lead approval before retiring any Event Rule",
+    "Platform Owner approval before activating Now Assist AIOps",
+    "NOC operator sign-off after 4 consecutive weeks of clean dashboards"
+  ],
+  "auditRequirements": [
+    "Read-only query log per execution",
+    "Event Rule retirement update set archived",
+    "Baseline window evidence preserved (alert volume per source per day)"
+  ],
+  "rollbackPlan": "Re-enable retired Event Rules via the original update set if alert volume drops correlate with missed real incidents. AIOps anomaly detection has its own kill switch and can be reverted to alert-only mode without configuration loss.",
+  "tests": [
+    "Synthetic redundant Event Rule pair surfaces in the redundancy list",
+    "Event source without health check appears in the gap list",
+    "Alert without Service Map binding does not trigger an incident",
+    "AIOps activation blocked if baseline is under 90 days",
+    "Noise ratio target met in a synthetic 90-day replay"
+  ]
+}

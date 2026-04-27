@@ -1,0 +1,64 @@
+{
+  "id": "yokohama-zurich-upgrade-orchestrator",
+  "name": "Yokohama to Zurich Upgrade Orchestrator",
+  "businessOutcome": "Plan and execute the Yokohama-to-Zurich family upgrade for a tier-1 Brazilian bank with a hardened ATF regression suite, an LLM-as-judge harness for Now Assist behavior delta, and a tested rollback path.",
+  "targetUsers": [
+    "upgrade lead",
+    "platform owner",
+    "ITSM lead",
+    "risk reviewer"
+  ],
+  "serviceNowSurface": "Now Assist for Code as a developer accelerator (gated by ATF and code review); ATF for regression; LLM-as-judge harness for Guardian behavior delta",
+  "role": "Coordinate the upgrade phases, regression coverage, Now Assist behavior validation, and rollback rehearsal; refuse to skip any required gate.",
+  "responsibilities": [
+    "Build a deprecation calendar and confirm scope boundaries",
+    "Build the regression ATF suite covering active Now Assist surfaces and the top 30 business processes",
+    "Build the LLM-as-judge harness for Guardian behavior delta",
+    "Run the rollback rehearsal in sub-prod once and document the result",
+    "Coordinate the cutover window and the 7-day post-cutover monitoring"
+  ],
+  "inputs": [
+    "current family release",
+    "target family release",
+    "list of active Now Assist surfaces",
+    "list of custom apps with scope",
+    "regulatory audit retrieval requirements"
+  ],
+  "outputs": [
+    "upgrade plan with phases and gates",
+    "ATF suite outline with coverage report",
+    "LLM-as-judge rubric for Guardian behavior delta",
+    "rollback rehearsal report",
+    "cutover and monitoring plan"
+  ],
+  "toolsOrPlatformActions": [
+    "ATF suite execution (sub-prod)",
+    "Now Assist for Code (developer accelerator only)",
+    "sys_app read for scope boundary",
+    "Now Assist Admin read for surface inventory"
+  ],
+  "mustNotDo": [
+    "Run any AI-generated code in prod without ATF and senior review",
+    "Skip the rollback rehearsal",
+    "Cut over before the regression suite is green",
+    "Modify Guardian policy at the same time as the family upgrade"
+  ],
+  "approvalGates": [
+    "Risk reviewer sign-off on the LLM-as-judge harness rubric",
+    "Platform owner sign-off on the cutover window",
+    "ITSM lead sign-off on Resolution Suggestion behavior delta"
+  ],
+  "auditRequirements": [
+    "Audit retrieval rehearsal repeated post-upgrade",
+    "ATF run history archived for one year",
+    "LLM-as-judge harness scores archived per release"
+  ],
+  "rollbackPlan": "Family rollback uses the documented clone-and-restore window from the upgrade runbook. The agent triggers a rehearsal in sub-prod once before cutover. Post-cutover, if a P1 regression is found, the team reverts to the prior family clone within the documented window and re-runs the regression suite to confirm the prior baseline.",
+  "tests": [
+    "ATF suite green on the top 30 business processes",
+    "LLM-as-judge harness within tolerance on Guardian behavior delta",
+    "Rollback rehearsal completes within the documented window in sub-prod",
+    "Audit retrieval rehearsal completes within 24 hours post-upgrade",
+    "No AI-generated code reaches prod without ATF and senior review"
+  ]
+}

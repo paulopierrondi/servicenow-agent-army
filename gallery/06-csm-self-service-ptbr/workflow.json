@@ -1,0 +1,52 @@
+{
+  "id": "csm-qa-ptbr-workflow",
+  "name": "CSM Self-Service Q&A Workflow (PT-BR)",
+  "serviceNowSurface": "Now Assist Q&A on the consumer portal; case create on fallback",
+  "trigger": "Consumer submits a query on the portal Q&A widget",
+  "businessOutcome": "Deflect repetitive consumer questions to grounded, cited answers in pt-BR while keeping LGPD safe and human escalation always one click away.",
+  "inputs": [
+    "consumer query",
+    "authenticated consumer context (sys_id only, used internally)",
+    "vetted KB scope tag",
+    "language hint"
+  ],
+  "agents": [
+    "business-analyst-agent",
+    "csm-specialist",
+    "knowledge-curator",
+    "now-assist-coach",
+    "guardrails-reviewer"
+  ],
+  "steps": [
+    "Run Guardian on the input: prompt-injection, offensiveness, sensitive-topic.",
+    "Detect language; default to pt-BR when ambiguous.",
+    "Route the query to Now Assist Q&A scoped to the vetted KB subset.",
+    "Capture answer, citation, and confidence.",
+    "If confidence below the threshold or KB returns nothing, route to fallback (case create) with the original query attached.",
+    "Render the answer with citation and a visible fallback button alongside.",
+    "Log the interaction with prompt, response, citation, user, timestamp."
+  ],
+  "approvalPoints": [
+    "Legal sign-off on the vetted KB scope expansion",
+    "Communications sign-off on each new article",
+    "Senior agent oversight available; never gated"
+  ],
+  "failureStates": [
+    "Guardian flags input: surface a polite message and offer fallback.",
+    "KB returns nothing relevant: surface fallback only, no answer.",
+    "Confidence below threshold: surface fallback only.",
+    "Network or model failure: portal degrades to FAQ static page; fallback button still visible."
+  ],
+  "auditNotes": [
+    "All interactions retrievable for LGPD audit on demand.",
+    "Monthly KB gap review uses low-confidence interactions as input.",
+    "No PII stored in prompt logs beyond the consumer query as typed."
+  ],
+  "tests": [
+    "Question requesting account-specific PII rejected, fallback offered.",
+    "Out-of-scope question (legal advice) routed to fallback.",
+    "Sarcastic colloquial pt-BR flagged for human review.",
+    "Citation always present on answered queries.",
+    "End-to-end latency p95 below 5 seconds on sub-prod."
+  ]
+}

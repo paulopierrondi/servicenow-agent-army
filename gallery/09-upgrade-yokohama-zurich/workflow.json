@@ -1,0 +1,53 @@
+{
+  "id": "yokohama-zurich-upgrade-workflow",
+  "name": "Yokohama to Zurich Upgrade Workflow",
+  "serviceNowSurface": "ATF for regression; Now Assist for Code as developer accelerator; manual cutover window",
+  "trigger": "Upgrade lead initiates the upgrade cycle",
+  "businessOutcome": "Move from Yokohama to Zurich with regression coverage on Now Assist surfaces and the top 30 business processes, a tested rollback rehearsal, and a 7-day post-cutover monitoring window.",
+  "inputs": [
+    "current family",
+    "target family",
+    "active Now Assist surfaces",
+    "custom app inventory",
+    "audit retrieval requirements"
+  ],
+  "agents": [
+    "upgrade-advisor",
+    "atf-test-generator",
+    "workflow-composer",
+    "enterprise-architect-agent"
+  ],
+  "steps": [
+    "Build the deprecation calendar and confirm scope boundaries (scoped vs global).",
+    "Build the ATF regression suite for the top 30 business processes plus the three active Now Assist surfaces.",
+    "Build the LLM-as-judge harness for Guardian behavior delta.",
+    "Run the rollback rehearsal in sub-prod once and archive the result.",
+    "Run the upgrade in sub-prod; run the ATF suite and the LLM-as-judge harness; document any delta.",
+    "Risk reviewer sign-off on the deltas; remediate if needed.",
+    "Cut over to Zurich in prod within the documented window.",
+    "Run the audit retrieval rehearsal post-upgrade and the 7-day monitoring window."
+  ],
+  "approvalPoints": [
+    "Risk reviewer sign-off on the LLM-as-judge harness rubric",
+    "Platform owner sign-off on the cutover window",
+    "Risk reviewer sign-off on Now Assist surface deltas"
+  ],
+  "failureStates": [
+    "ATF red on a top-30 process: cutover blocked; remediate and re-run.",
+    "LLM-as-judge out of tolerance on Guardian: cutover blocked; risk reviewer assesses.",
+    "Rollback rehearsal fails: cutover postponed until the rehearsal succeeds.",
+    "Audit retrieval rehearsal fails post-upgrade: declare incident and engage support."
+  ],
+  "auditNotes": [
+    "ATF run history retained one year.",
+    "LLM-as-judge harness scores retained per release.",
+    "Cutover decision record archived with the platform owner sign-off."
+  ],
+  "tests": [
+    "ATF suite green on the top 30 processes.",
+    "LLM-as-judge harness within tolerance on Guardian behavior delta.",
+    "Rollback rehearsal completes within the documented window in sub-prod.",
+    "Audit retrieval rehearsal completes within 24 hours post-upgrade.",
+    "No AI-generated code reaches prod without ATF and senior review."
+  ]
+}

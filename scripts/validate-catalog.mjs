@@ -71,8 +71,10 @@ function validateSkills() {
   const paths = [
     ".agents/skills/servicenow-agent-factory/SKILL.md",
     ".agents/skills/token-saver-specialist/SKILL.md",
+    ".agents/skills/demo-storyteller-v2/SKILL.md",
     ".claude/skills/servicenow-agent-factory/SKILL.md",
-    ".claude/skills/token-saver-specialist/SKILL.md"
+    ".claude/skills/token-saver-specialist/SKILL.md",
+    ".claude/skills/demo-storyteller-v2/SKILL.md"
   ];
 
   for (const path of paths) {

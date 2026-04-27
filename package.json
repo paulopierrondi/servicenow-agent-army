@@ -12,6 +12,7 @@
   "scripts": {
     "validate": "node scripts/validate-catalog.mjs",
     "new:agent": "node scripts/new-agent.mjs",
+    "metrics:snapshot": "node scripts/metrics-snapshot.mjs",
     "cli": "pnpm --filter servicenow-army dev --",
     "cli:build": "pnpm --filter servicenow-army build",
     "build": "turbo run build",

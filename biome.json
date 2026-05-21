@@ -3,6 +3,8 @@
   "files": {
     "ignore": [
       "node_modules",
+      ".next",
+      "apps/**/.next",
       "dist",
       "build",
       ".turbo",
@@ -27,10 +29,10 @@
     "useIgnoreFile": true
   },
   "organizeImports": {
-    "enabled": true
+    "enabled": false
   },
   "formatter": {
-    "enabled": true,
+    "enabled": false,
     "indentStyle": "space",
     "indentWidth": 2,
     "lineWidth": 100,
@@ -41,7 +43,9 @@
     "rules": {
       "recommended": true,
       "style": {
-        "useImportType": "off"
+        "useImportType": "off",
+        "noUnusedTemplateLiteral": "off",
+        "useTemplate": "off"
       },
       "suspicious": {
         "noExplicitAny": "warn"

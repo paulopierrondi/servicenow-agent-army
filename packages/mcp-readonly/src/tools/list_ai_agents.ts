@@ -41,7 +41,7 @@ export const list_ai_agents: ToolDefinition<typeof inputSchema, { agents: AiAgen
         sys_id: "MOCK_AGENT_0001",
         name: "Incident Triage",
         application: input.scope ?? "global",
-        active: input.active_only ? true : true,
+        active: true,
         source: "ai_agent_studio",
       },
     ];

@@ -1,0 +1,793 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1080" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body {
+        margin: 0;
+        width: 1080px;
+        height: 1080px;
+        overflow: hidden;
+        background: #001d2b;
+        color: #ebf2f5;
+        font-family: "Lato", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        -webkit-font-smoothing: antialiased;
+        font-feature-settings: "kern", "liga";
+      }
+
+      [data-composition-id="main"] {
+        position: relative;
+        width: 1080px;
+        height: 1080px;
+        background: #001d2b;
+        overflow: hidden;
+      }
+
+      .scene {
+        position: absolute;
+        inset: 0;
+        width: 1080px;
+        height: 1080px;
+        opacity: 0;
+        will-change: opacity, transform;
+      }
+
+      /* Persistent watermark + progress */
+      .watermark {
+        position: absolute;
+        bottom: 30px;
+        left: 36px;
+        display: inline-flex;
+        align-items: center;
+        gap: 9px;
+        color: #8da7b4;
+        font-size: 14px;
+        font-weight: 700;
+        z-index: 100;
+      }
+      .watermark .dot {
+        width: 11px;
+        height: 11px;
+        border-radius: 999px;
+        background: #62d84e;
+      }
+      .progress-bar {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        height: 3px;
+        width: 0%;
+        background: #00b0e5;
+        z-index: 100;
+        box-shadow: 0 0 12px rgba(0, 176, 229, 0.5);
+      }
+
+      /* atoms */
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: 5px 11px;
+        background: #052633;
+        border: 1px solid #1a4456;
+        border-radius: 4px;
+        font-size: 13px;
+        font-weight: 700;
+        color: #8da7b4;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+      }
+      .pill-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 999px;
+        background: #62d84e;
+      }
+      .pill-dot.blue {
+        background: #00b0e5;
+      }
+
+      /* ---------- Scene 1: title ---------- */
+      #scene-1 {
+        padding: 110px 80px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 24px;
+      }
+      .s1-eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 11px;
+        align-self: flex-start;
+      }
+      .s1-eyebrow .now-dot {
+        width: 13px;
+        height: 13px;
+        border-radius: 999px;
+        background: #62d84e;
+      }
+      .s1-eyebrow .label {
+        font-size: 18px;
+        font-weight: 900;
+        color: #ebf2f5;
+      }
+      .s1-eyebrow .sub {
+        font-size: 16px;
+        font-weight: 700;
+        color: #8da7b4;
+      }
+      .s1-title {
+        font-size: 116px;
+        font-weight: 900;
+        line-height: 0.96;
+        letter-spacing: -0.012em;
+        color: #ebf2f5;
+        max-width: 940px;
+      }
+      .s1-title .accent { color: #00b0e5; }
+      .s1-subtitle {
+        font-size: 30px;
+        font-weight: 400;
+        line-height: 1.4;
+        color: #8da7b4;
+        max-width: 880px;
+      }
+      .s1-meta {
+        display: flex;
+        gap: 10px;
+        margin-top: 14px;
+        flex-wrap: wrap;
+      }
+
+      /* ---------- Scene 2: 4 gates ---------- */
+      #scene-2 {
+        padding: 80px 80px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 28px;
+      }
+      .s2-eyebrow {
+        font-size: 14px;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: #5d7a87;
+      }
+      .s2-headline {
+        font-size: 70px;
+        font-weight: 900;
+        line-height: 1.04;
+        letter-spacing: -0.012em;
+        color: #ebf2f5;
+        max-width: 920px;
+      }
+      .s2-headline .accent { color: #00b0e5; }
+      .s2-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
+        margin-top: 18px;
+      }
+      .gate {
+        background: #0a323e;
+        border: 1px solid #1a4456;
+        border-radius: 6px;
+        padding: 22px 24px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        position: relative;
+        overflow: hidden;
+      }
+      .gate-num {
+        font-size: 14px;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        color: #5d7a87;
+      }
+      .gate-name {
+        font-size: 38px;
+        font-weight: 900;
+        letter-spacing: -0.005em;
+        color: #ebf2f5;
+      }
+      .gate-body {
+        font-size: 17px;
+        font-weight: 400;
+        color: #8da7b4;
+        line-height: 1.5;
+      }
+      .gate .check {
+        position: absolute;
+        top: 18px;
+        right: 22px;
+        width: 36px;
+        height: 36px;
+        border-radius: 999px;
+        background: rgba(98, 216, 78, 0.15);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transform: scale(0.6);
+      }
+      .gate .check svg {
+        stroke: #62d84e;
+        stroke-width: 3.5;
+        fill: none;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+      /* ---------- Scene 3: council deliberation ---------- */
+      #scene-3 {
+        padding: 60px 56px;
+        display: flex;
+        flex-direction: column;
+        gap: 22px;
+      }
+      .s3-headline {
+        font-size: 50px;
+        font-weight: 900;
+        line-height: 1.04;
+        letter-spacing: -0.012em;
+      }
+      .s3-headline .accent { color: #00b0e5; }
+      .s3-sub {
+        font-size: 22px;
+        color: #8da7b4;
+        max-width: 920px;
+      }
+      .s3-frame {
+        position: relative;
+        flex: 1;
+        border: 1px solid #1a4456;
+        border-radius: 6px;
+        overflow: hidden;
+        background: #001d2b;
+      }
+      .s3-frame img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: top center;
+        will-change: transform;
+        display: block;
+      }
+      .s3-frame .browser-bar {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 30px;
+        background: rgba(5, 38, 51, 0.95);
+        border-bottom: 1px solid #1a4456;
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        padding: 0 14px;
+        z-index: 5;
+      }
+      .s3-frame .browser-bar .bd {
+        width: 9px;
+        height: 9px;
+        border-radius: 999px;
+        background: #1a4456;
+      }
+      .s3-frame .browser-bar .url {
+        margin-left: 12px;
+        font-family: ui-monospace, "JetBrains Mono", Menlo, monospace;
+        font-size: 12px;
+        color: #8da7b4;
+        font-weight: 700;
+      }
+
+      /* ---------- Scene 4: approval moment ---------- */
+      #scene-4 {
+        padding: 100px 80px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 26px;
+      }
+      .s4-stamp {
+        display: inline-flex;
+        align-items: center;
+        gap: 14px;
+        padding: 14px 22px;
+        background: #052633;
+        border: 2px solid #00b0e5;
+        border-radius: 6px;
+        align-self: flex-start;
+        box-shadow: 0 0 30px rgba(0, 176, 229, 0.18);
+      }
+      .s4-stamp .arr {
+        font-size: 26px;
+        font-weight: 900;
+        color: #00b0e5;
+      }
+      .s4-stamp .text {
+        font-size: 22px;
+        font-weight: 900;
+        color: #00b0e5;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+      .s4-headline {
+        font-size: 96px;
+        font-weight: 900;
+        line-height: 0.98;
+        letter-spacing: -0.012em;
+        color: #ebf2f5;
+        max-width: 940px;
+      }
+      .s4-headline .accent { color: #62d84e; }
+      .s4-checks {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        margin-top: 18px;
+      }
+      .s4-check {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 14px 20px;
+        background: #0a323e;
+        border: 1px solid #1a4456;
+        border-radius: 4px;
+        box-shadow: inset 3px 0 0 0 #62d84e;
+      }
+      .s4-check .gate-tag {
+        font-size: 12px;
+        font-weight: 700;
+        color: #5d7a87;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+      }
+      .s4-check .gate-name {
+        font-size: 22px;
+        font-weight: 900;
+        color: #ebf2f5;
+      }
+      .s4-check .ok {
+        margin-left: auto;
+        width: 28px;
+        height: 28px;
+        border-radius: 999px;
+        background: rgba(98, 216, 78, 0.18);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #62d84e;
+        font-size: 16px;
+        font-weight: 900;
+      }
+      .s4-sub {
+        font-size: 22px;
+        color: #8da7b4;
+      }
+
+      /* ---------- Scene 5: codex executes ---------- */
+      #scene-5 {
+        padding: 60px 56px;
+        display: flex;
+        flex-direction: column;
+        gap: 22px;
+      }
+      .s5-headline {
+        font-size: 56px;
+        font-weight: 900;
+        line-height: 1.02;
+        letter-spacing: -0.012em;
+      }
+      .s5-headline .accent { color: #00b0e5; }
+      .s5-sub {
+        font-size: 22px;
+        color: #8da7b4;
+        max-width: 880px;
+      }
+      .term {
+        background: #052633;
+        border: 1px solid #1a4456;
+        border-radius: 6px;
+        overflow: hidden;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+      }
+      .term-bar {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 11px 14px;
+        background: #0a323e;
+        border-bottom: 1px solid #1a4456;
+      }
+      .term-bar .dot { width: 9px; height: 9px; border-radius: 999px; background: #1a4456; }
+      .term-bar .name {
+        margin-left: 12px;
+        font-size: 13px;
+        color: #ebf2f5;
+        font-family: ui-monospace, "JetBrains Mono", Menlo, monospace;
+        font-weight: 700;
+      }
+      .term-body {
+        flex: 1;
+        padding: 22px 22px;
+        font-family: ui-monospace, "JetBrains Mono", Menlo, monospace;
+        font-size: 19px;
+        line-height: 1.85;
+        color: #ebf2f5;
+      }
+      .term-body .muted { color: #5d7a87; }
+      .term-body .prompt { color: #00b0e5; font-weight: 700; }
+      .term-body .ok { color: #62d84e; font-weight: 700; }
+      .term-body .acc { color: #00b0e5; font-weight: 700; }
+      .term-line {
+        opacity: 0;
+        display: block;
+      }
+      .term-final {
+        opacity: 0;
+        margin-top: 14px;
+        padding: 12px 16px;
+        background: rgba(98, 216, 78, 0.10);
+        border: 1px solid rgba(98, 216, 78, 0.30);
+        border-radius: 4px;
+        color: #62d84e;
+        font-weight: 700;
+        font-size: 20px;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        align-self: flex-start;
+      }
+
+      /* ---------- Scene 6: CTA ---------- */
+      #scene-6 {
+        padding: 100px 80px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-start;
+        gap: 22px;
+      }
+      .s6-tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 11px;
+        padding: 7px 14px;
+        border: 1px solid #1a4456;
+        background: #052633;
+        border-radius: 4px;
+        color: #ebf2f5;
+        font-size: 16px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+      }
+      .s6-tag .d {
+        width: 10px;
+        height: 10px;
+        border-radius: 999px;
+        background: #62d84e;
+      }
+      .s6-headline {
+        font-size: 116px;
+        font-weight: 900;
+        line-height: 0.96;
+        letter-spacing: -0.012em;
+        color: #ebf2f5;
+        max-width: 920px;
+      }
+      .s6-headline .accent { color: #00b0e5; }
+      .s6-link {
+        margin-top: 4px;
+        font-family: ui-monospace, "JetBrains Mono", Menlo, monospace;
+        font-size: 26px;
+        color: #00b0e5;
+        font-weight: 700;
+      }
+      .s6-meta {
+        display: flex;
+        gap: 12px;
+        margin-top: 14px;
+        flex-wrap: wrap;
+      }
+      .s6-credit {
+        margin-top: 24px;
+        font-size: 18px;
+        color: #5d7a87;
+        font-weight: 700;
+      }
+      .s6-credit b {
+        color: #8da7b4;
+        font-weight: 900;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="50"
+      data-width="1080"
+      data-height="1080"
+    >
+      <!-- Scene 1: title (0 -> 5.5) -->
+      <div
+        id="scene-1"
+        class="scene clip"
+        data-start="0"
+        data-duration="5.5"
+        data-track-index="1"
+        style="z-index: 1"
+      >
+        <div class="s1-eyebrow">
+          <span class="now-dot"></span>
+          <span class="label">servicenow agent army</span>
+          <span class="sub">·  Codex + SDK pipeline</span>
+        </div>
+        <div class="s1-title">
+          From council<br />
+          <span class="accent">to AI Agent Studio.</span>
+        </div>
+        <div class="s1-subtitle">
+          Four gates. One human approval. Then GPT Codex runs the official SDK.
+        </div>
+        <div class="s1-meta">
+          <span class="pill"><span class="pill-dot"></span>20 advisors</span>
+          <span class="pill"><span class="pill-dot blue"></span>Fluent SDK 4.6 · AI Agent Studio · NASK</span>
+        </div>
+      </div>
+
+      <!-- Scene 2: 4 gates (5 -> 12) -->
+      <div
+        id="scene-2"
+        class="scene clip"
+        data-start="5"
+        data-duration="7"
+        data-track-index="2"
+        style="z-index: 2"
+      >
+        <span class="s2-eyebrow" id="s2-eyebrow">The pipeline</span>
+        <div class="s2-headline" id="s2-headline">
+          Four gates before<br />
+          <span class="accent">any line of code runs.</span>
+        </div>
+        <div class="s2-grid">
+          <div class="gate" id="gate-1">
+            <span class="gate-num">GATE 1</span>
+            <span class="gate-name">Scope</span>
+            <span class="gate-body">Tables · surfaces · integration points listed explicitly.</span>
+            <span class="check"><svg width="20" height="20" viewBox="0 0 20 20"><polyline points="4,11 8.5,15 16,6"/></svg></span>
+          </div>
+          <div class="gate" id="gate-2">
+            <span class="gate-num">GATE 2</span>
+            <span class="gate-name">Necessity</span>
+            <span class="gate-body">AI use case or structural fix? Anti-pattern check.</span>
+            <span class="check"><svg width="20" height="20" viewBox="0 0 20 20"><polyline points="4,11 8.5,15 16,6"/></svg></span>
+          </div>
+          <div class="gate" id="gate-3">
+            <span class="gate-num">GATE 3</span>
+            <span class="gate-name">ROI</span>
+            <span class="gate-body">90-day metric · value with source · credit cost sized.</span>
+            <span class="check"><svg width="20" height="20" viewBox="0 0 20 20"><polyline points="4,11 8.5,15 16,6"/></svg></span>
+          </div>
+          <div class="gate" id="gate-4">
+            <span class="gate-num">GATE 4</span>
+            <span class="gate-name">Architecture</span>
+            <span class="gate-body">Dry-run · approval token · audit log · 24h rollback.</span>
+            <span class="check"><svg width="20" height="20" viewBox="0 0 20 20"><polyline points="4,11 8.5,15 16,6"/></svg></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Scene 3: council deliberation (11.5 -> 21) -->
+      <div
+        id="scene-3"
+        class="scene clip"
+        data-start="11.5"
+        data-duration="9.5"
+        data-track-index="3"
+        style="z-index: 3"
+      >
+        <div>
+          <div class="s3-headline" id="s3-headline">
+            Twenty advisors deliberate.<br />
+            <span class="accent">Pierrondi EA leads.</span>
+          </div>
+          <div class="s3-sub" id="s3-sub" style="margin-top: 8px;">
+            Council validates the spec the moment a human approves the four gates.
+          </div>
+        </div>
+        <div class="s3-frame" id="s3-frame">
+          <div class="browser-bar">
+            <span class="bd"></span><span class="bd"></span><span class="bd"></span>
+            <span class="url">localhost:3003 · servicenow agent army</span>
+          </div>
+          <img id="s3-img-form" src="03-form-filled.png" alt="form filled" />
+          <img
+            id="s3-img-mid"
+            src="04-deliberation-mid.png"
+            alt="deliberation in progress"
+            style="position:absolute; inset:0; opacity:0;"
+          />
+          <img
+            id="s3-img-done"
+            src="05-deliberation-complete.png"
+            alt="deliberation complete"
+            style="position:absolute; inset:0; opacity:0;"
+          />
+        </div>
+      </div>
+
+      <!-- Scene 4: approval moment (20.5 -> 28) -->
+      <div
+        id="scene-4"
+        class="scene clip"
+        data-start="20.5"
+        data-duration="7.5"
+        data-track-index="4"
+        style="z-index: 4"
+      >
+        <div class="s4-stamp">
+          <span class="arr">→</span>
+          <span class="text">Human approves explicitly</span>
+        </div>
+        <div class="s4-headline">
+          Four green.<br />
+          <span class="accent">Code runs.</span>
+        </div>
+        <div class="s4-checks">
+          <div class="s4-check"><span><span class="gate-tag">Gate 1</span><br/><span class="gate-name">Scope</span></span><span class="ok">✓</span></div>
+          <div class="s4-check"><span><span class="gate-tag">Gate 2</span><br/><span class="gate-name">Necessity</span></span><span class="ok">✓</span></div>
+          <div class="s4-check"><span><span class="gate-tag">Gate 3</span><br/><span class="gate-name">ROI</span></span><span class="ok">✓</span></div>
+          <div class="s4-check"><span><span class="gate-tag">Gate 4</span><br/><span class="gate-name">Architecture</span></span><span class="ok">✓</span></div>
+        </div>
+        <div class="s4-sub">No auto-deploy. Ever.</div>
+      </div>
+
+      <!-- Scene 5: codex executes (27.5 -> 43) -->
+      <div
+        id="scene-5"
+        class="scene clip"
+        data-start="27.5"
+        data-duration="15.5"
+        data-track-index="5"
+        style="z-index: 5"
+      >
+        <div>
+          <div class="s5-headline" id="s5-headline">
+            Codex runs the <span class="accent">official SDK.</span>
+          </div>
+          <div class="s5-sub" id="s5-sub" style="margin-top: 12px;">
+            ServiceNow Fluent SDK 4.6 · deterministic · auditable · sub-prod is the ceiling.
+          </div>
+        </div>
+        <div class="term" id="term">
+          <div class="term-bar">
+            <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+            <span class="name">codex · servicenow-agent-army</span>
+          </div>
+          <div class="term-body">
+            <span class="term-line" id="t-l1"><span class="muted">$</span> <span class="prompt">codex run servicenow-army deploy</span></span>
+            <span class="term-line" id="t-l2"><span class="muted">  --spec agent-spec.json --target sub-prod</span></span>
+            <span class="term-line" id="t-l3" style="margin-top:14px"><span class="ok">✓</span> now-sdk init <span class="muted">— scope x_sn_army_draft</span></span>
+            <span class="term-line" id="t-l4"><span class="ok">✓</span> now-sdk add ai-agent <span class="muted">— id itsm-agent-9169</span></span>
+            <span class="term-line" id="t-l5"><span class="ok">✓</span> now-sdk add nask-skill <span class="muted">— id itsm-itsm-9169</span></span>
+            <span class="term-line" id="t-l6"><span class="ok">✓</span> now-sdk build <span class="muted">— ATF regression staged</span></span>
+            <span class="term-line" id="t-l7"><span class="ok">✓</span> now-sdk deploy <span class="muted">— target sub-prod</span></span>
+            <span class="term-final" id="t-final"><span class="acc">→</span> AI Agent Studio · sub-prod · <span class="ok">registered</span></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Scene 6: CTA (42.5 -> 50) -->
+      <div
+        id="scene-6"
+        class="scene clip"
+        data-start="42.5"
+        data-duration="7.5"
+        data-track-index="6"
+        style="z-index: 6"
+      >
+        <span class="s6-tag" id="s6-tag"><span class="d"></span>v0.1 alpha · MIT · open source</span>
+        <div class="s6-headline" id="s6-headline">
+          Outcome.<br /><span class="accent">Then output.</span>
+        </div>
+        <div class="s6-link" id="s6-link">github.com/paulopierrondi/servicenow-agent-army</div>
+        <div class="s6-meta">
+          <span class="pill"><span class="pill-dot"></span>fork · run · refuse</span>
+          <span class="pill"><span class="pill-dot blue"></span>Codex · Claude Code · same army</span>
+        </div>
+        <div class="s6-credit" id="s6-credit"><b>Paulo Pierrondi</b> · TAE FSI Brazil · ServiceNow</div>
+      </div>
+
+      <!-- Persistent watermark + progress bar -->
+      <div class="watermark">
+        <span class="dot"></span>
+        <span>servicenow agent army  ·  c05 codex pipeline</span>
+      </div>
+      <div class="progress-bar" id="progress"></div>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+
+      tl.to("#progress", { width: "100%", duration: 50, ease: "none" }, 0);
+
+      // Scene 1: title (0 -> 5.5)
+      tl.fromTo("#scene-1", { opacity: 0 }, { opacity: 1, duration: 0.6, ease: "power2.out" }, 0.1);
+      tl.from("#scene-1 .s1-eyebrow", { opacity: 0, x: -20, duration: 0.6, ease: "power3.out" }, 0.4);
+      tl.from("#scene-1 .s1-title", { opacity: 0, y: 30, duration: 0.85, ease: "expo.out" }, 0.6);
+      tl.from("#scene-1 .s1-subtitle", { opacity: 0, y: 18, duration: 0.7, ease: "power3.out" }, 1.1);
+      tl.from("#scene-1 .s1-meta .pill", { opacity: 0, y: 12, scale: 0.95, duration: 0.55, ease: "back.out(1.4)", stagger: 0.12 }, 1.45);
+
+      // Scene 2: 4 gates (5 -> 12)
+      tl.fromTo("#scene-2", { opacity: 0 }, { opacity: 1, duration: 0.6, ease: "power2.out" }, 5.0);
+      tl.from("#s2-eyebrow", { opacity: 0, y: 12, duration: 0.45, ease: "power2.out" }, 5.3);
+      tl.from("#s2-headline", { opacity: 0, y: 26, duration: 0.7, ease: "expo.out" }, 5.5);
+      tl.from(
+        ["#gate-1", "#gate-2", "#gate-3", "#gate-4"],
+        { opacity: 0, y: 22, scale: 0.96, duration: 0.55, ease: "back.out(1.3)", stagger: 0.13 },
+        6.4,
+      );
+      tl.to("#gate-1 .check", { opacity: 1, scale: 1, duration: 0.4, ease: "back.out(1.6)" }, 8.6);
+      tl.to("#gate-2 .check", { opacity: 1, scale: 1, duration: 0.4, ease: "back.out(1.6)" }, 8.85);
+      tl.to("#gate-3 .check", { opacity: 1, scale: 1, duration: 0.4, ease: "back.out(1.6)" }, 9.1);
+      tl.to("#gate-4 .check", { opacity: 1, scale: 1, duration: 0.4, ease: "back.out(1.6)" }, 9.35);
+
+      // Scene 3: deliberation (11.5 -> 21)
+      tl.fromTo("#scene-3", { opacity: 0 }, { opacity: 1, duration: 0.6, ease: "power2.out" }, 11.5);
+      tl.from("#s3-headline", { opacity: 0, y: 22, duration: 0.7, ease: "expo.out" }, 11.9);
+      tl.from("#s3-sub", { opacity: 0, y: 14, duration: 0.55, ease: "power3.out" }, 12.2);
+      tl.from("#s3-frame", { opacity: 0, scale: 0.97, duration: 0.7, ease: "power2.out" }, 12.4);
+      tl.fromTo("#s3-img-form", { scale: 1.0 }, { scale: 1.04, duration: 4.2, ease: "power1.inOut" }, 12.5);
+      tl.to("#s3-img-mid", { opacity: 1, duration: 0.6, ease: "power2.out" }, 15.5);
+      tl.fromTo("#s3-img-mid", { scale: 1.0 }, { scale: 1.04, duration: 3.0, ease: "power1.inOut" }, 15.5);
+      tl.to("#s3-img-done", { opacity: 1, duration: 0.55, ease: "power2.out" }, 18.0);
+
+      // Scene 4: approval (20.5 -> 28)
+      tl.fromTo("#scene-4", { opacity: 0 }, { opacity: 1, duration: 0.6, ease: "power2.out" }, 20.5);
+      tl.from("#scene-4 .s4-stamp", { opacity: 0, scale: 0.9, duration: 0.5, ease: "back.out(1.5)" }, 20.85);
+      tl.from("#scene-4 .s4-headline", { opacity: 0, y: 30, duration: 0.85, ease: "expo.out" }, 21.15);
+      tl.from(
+        "#scene-4 .s4-check",
+        { opacity: 0, x: -20, duration: 0.5, ease: "power3.out", stagger: 0.13 },
+        22.2,
+      );
+      tl.from("#scene-4 .s4-sub", { opacity: 0, y: 12, duration: 0.45, ease: "power2.out" }, 23.4);
+
+      // Scene 5: codex executes (27.5 -> 43)
+      tl.fromTo("#scene-5", { opacity: 0 }, { opacity: 1, duration: 0.6, ease: "power2.out" }, 27.5);
+      tl.from("#s5-headline", { opacity: 0, y: 24, duration: 0.7, ease: "expo.out" }, 27.85);
+      tl.from("#s5-sub", { opacity: 0, y: 14, duration: 0.5, ease: "power3.out" }, 28.2);
+      tl.from("#term", { opacity: 0, scale: 0.97, duration: 0.6, ease: "power3.out" }, 28.45);
+      const lineIds = ["#t-l1", "#t-l2", "#t-l3", "#t-l4", "#t-l5", "#t-l6", "#t-l7"];
+      lineIds.forEach((id, i) => {
+        tl.to(id, { opacity: 1, duration: 0.35, ease: "power2.out" }, 29.2 + i * 1.3);
+      });
+      tl.to("#t-final", { opacity: 1, duration: 0.5, ease: "back.out(1.4)" }, 39.5);
+
+      // Scene 6: CTA (42.5 -> 50)
+      tl.fromTo("#scene-6", { opacity: 0 }, { opacity: 1, duration: 0.6, ease: "power2.out" }, 42.5);
+      tl.from("#s6-tag", { opacity: 0, y: 14, duration: 0.45, ease: "power3.out" }, 42.85);
+      tl.from("#s6-headline", { opacity: 0, y: 28, duration: 0.85, ease: "expo.out" }, 43.05);
+      tl.from("#s6-link", { opacity: 0, y: 16, duration: 0.55, ease: "power3.out" }, 43.6);
+      tl.from("#scene-6 .pill", { opacity: 0, y: 14, scale: 0.95, duration: 0.5, ease: "back.out(1.4)", stagger: 0.12 }, 43.9);
+      tl.from("#s6-credit", { opacity: 0, duration: 0.5, ease: "power2.out" }, 44.4);
+      tl.to("#progress", { opacity: 0.3, duration: 0.5, ease: "power2.in" }, 49.5);
+
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

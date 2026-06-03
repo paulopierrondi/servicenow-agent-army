@@ -1,0 +1,844 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1080" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body {
+        margin: 0;
+        width: 1080px;
+        height: 1080px;
+        overflow: hidden;
+        background: #001d2b;
+        color: #ebf2f5;
+        font-family: "Lato", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        -webkit-font-smoothing: antialiased;
+        font-feature-settings: "kern", "liga";
+      }
+
+      [data-composition-id="main"] {
+        position: relative;
+        width: 1080px;
+        height: 1080px;
+        background: #001d2b;
+        overflow: hidden;
+      }
+
+      .scene {
+        position: absolute;
+        inset: 0;
+        width: 1080px;
+        height: 1080px;
+        opacity: 0;
+        will-change: opacity, transform;
+      }
+
+      /* Persistent watermark + progress bar */
+      .watermark {
+        position: absolute;
+        bottom: 30px;
+        left: 36px;
+        display: inline-flex;
+        align-items: center;
+        gap: 9px;
+        color: #8da7b4;
+        font-size: 14px;
+        font-weight: 700;
+        z-index: 100;
+      }
+      .watermark .dot {
+        width: 11px;
+        height: 11px;
+        border-radius: 999px;
+        background: #62d84e;
+      }
+      .progress-bar {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        height: 3px;
+        width: 0%;
+        background: #00b0e5;
+        z-index: 100;
+        box-shadow: 0 0 12px rgba(0, 176, 229, 0.5);
+      }
+
+      /* ---------- atoms ---------- */
+
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: 5px 11px;
+        background: #052633;
+        border: 1px solid #1a4456;
+        border-radius: 4px;
+        font-size: 13px;
+        font-weight: 700;
+        color: #8da7b4;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+      }
+      .pill-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 999px;
+        background: #62d84e;
+      }
+      .pill-dot.blue {
+        background: #00b0e5;
+      }
+
+      .section-label {
+        font-size: 13px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.09em;
+        color: #5d7a87;
+      }
+
+      .kbd {
+        font-family: ui-monospace, "JetBrains Mono", Menlo, monospace;
+        font-size: 13px;
+        color: #8da7b4;
+        background: #052633;
+        border: 1px solid #1a4456;
+        border-radius: 3px;
+        padding: 2px 7px;
+        font-weight: 700;
+      }
+
+      /* ---------- Scene 1: title ---------- */
+
+      #scene-1 {
+        padding: 110px 80px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 26px;
+      }
+      .s1-eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 11px;
+        align-self: flex-start;
+      }
+      .s1-eyebrow .now-dot {
+        width: 13px;
+        height: 13px;
+        border-radius: 999px;
+        background: #62d84e;
+      }
+      .s1-eyebrow .label {
+        font-size: 18px;
+        font-weight: 900;
+        color: #ebf2f5;
+        letter-spacing: 0;
+      }
+      .s1-eyebrow .sub {
+        font-size: 16px;
+        font-weight: 700;
+        color: #8da7b4;
+        letter-spacing: 0;
+      }
+      .s1-title {
+        font-size: 118px;
+        font-weight: 900;
+        line-height: 0.96;
+        letter-spacing: -0.012em;
+        color: #ebf2f5;
+        max-width: 940px;
+      }
+      .s1-title .accent {
+        color: #00b0e5;
+      }
+      .s1-subtitle {
+        font-size: 30px;
+        font-weight: 400;
+        line-height: 1.4;
+        color: #8da7b4;
+        max-width: 850px;
+      }
+      .s1-meta {
+        display: flex;
+        gap: 10px;
+        margin-top: 14px;
+        flex-wrap: wrap;
+      }
+
+      /* ---------- Scene 2: problem ---------- */
+
+      #scene-2 {
+        padding: 120px 80px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 30px;
+      }
+      .s2-quote {
+        font-size: 78px;
+        font-weight: 900;
+        line-height: 1.04;
+        letter-spacing: -0.01em;
+        color: #ebf2f5;
+      }
+      .s2-list {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        margin-top: 18px;
+      }
+      .s2-row {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        font-size: 28px;
+        font-weight: 700;
+        letter-spacing: 0;
+      }
+      .s2-row .strike {
+        color: #5d7a87;
+        text-decoration: line-through;
+        text-decoration-color: rgba(237, 42, 45, 0.6);
+        text-decoration-thickness: 2px;
+      }
+      .s2-row .ok-text {
+        color: #ebf2f5;
+      }
+      .s2-row .check-mark {
+        display: inline-flex;
+        width: 30px;
+        height: 30px;
+        align-items: center;
+        justify-content: center;
+        border-radius: 4px;
+        background: rgba(98, 216, 78, 0.16);
+        color: #62d84e;
+        font-weight: 900;
+        font-size: 18px;
+      }
+      .s2-row .x-mark {
+        display: inline-flex;
+        width: 30px;
+        height: 30px;
+        align-items: center;
+        justify-content: center;
+        border-radius: 4px;
+        background: rgba(237, 42, 45, 0.12);
+        color: #ed2a2d;
+        font-weight: 900;
+        font-size: 18px;
+      }
+
+      /* ---------- Scene 3: app + deliberation ---------- */
+
+      #scene-3 {
+        padding: 60px 56px;
+        display: flex;
+        flex-direction: column;
+        gap: 22px;
+      }
+      .s3-caption {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+      .s3-headline {
+        font-size: 50px;
+        font-weight: 900;
+        line-height: 1.04;
+        letter-spacing: -0.01em;
+      }
+      .s3-headline .accent {
+        color: #00b0e5;
+      }
+      .s3-sub {
+        font-size: 22px;
+        color: #8da7b4;
+        font-weight: 400;
+        max-width: 920px;
+      }
+      .s3-frame {
+        position: relative;
+        flex: 1;
+        border: 1px solid #1a4456;
+        border-radius: 6px;
+        overflow: hidden;
+        background: #001d2b;
+      }
+      .s3-frame img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: top center;
+        will-change: transform;
+        display: block;
+      }
+      .s3-frame .browser-bar {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 30px;
+        background: rgba(5, 38, 51, 0.95);
+        border-bottom: 1px solid #1a4456;
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        padding: 0 14px;
+        z-index: 5;
+      }
+      .s3-frame .browser-bar .bd {
+        width: 9px;
+        height: 9px;
+        border-radius: 999px;
+        background: #1a4456;
+      }
+      .s3-frame .browser-bar .url {
+        margin-left: 12px;
+        font-family: ui-monospace, "JetBrains Mono", Menlo, monospace;
+        font-size: 12px;
+        color: #8da7b4;
+        font-weight: 700;
+      }
+
+      /* ---------- Scene 4: outputs ---------- */
+
+      #scene-4 {
+        padding: 60px 56px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+      .s4-caption {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+      .s4-headline {
+        font-size: 50px;
+        font-weight: 900;
+        line-height: 1.04;
+        letter-spacing: -0.01em;
+      }
+      .s4-sub {
+        font-size: 22px;
+        color: #8da7b4;
+      }
+      .s4-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
+        flex: 1;
+      }
+      .s4-card {
+        background: #0a323e;
+        border: 1px solid #1a4456;
+        border-radius: 4px;
+        padding: 16px 18px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        position: relative;
+        overflow: hidden;
+      }
+      .s4-card.accent {
+        box-shadow: inset 3px 0 0 0 #00b0e5;
+      }
+      .s4-card .label {
+        font-size: 12px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: #5d7a87;
+      }
+      .s4-card .title {
+        font-size: 21px;
+        font-weight: 900;
+        color: #ebf2f5;
+        letter-spacing: -0.005em;
+      }
+      .s4-card .body {
+        font-size: 14px;
+        color: #8da7b4;
+        font-family: ui-monospace, "JetBrains Mono", Menlo, monospace;
+        white-space: pre-wrap;
+        line-height: 1.6;
+        letter-spacing: 0;
+      }
+      .s4-card .copy {
+        position: absolute;
+        top: 14px;
+        right: 14px;
+        font-size: 11px;
+        color: #5d7a87;
+        font-weight: 700;
+      }
+
+      /* ---------- Scene 5: Claude Code / Codex ---------- */
+
+      #scene-5 {
+        padding: 60px 56px;
+        display: flex;
+        flex-direction: column;
+        gap: 22px;
+      }
+      .s5-headline {
+        font-size: 56px;
+        font-weight: 900;
+        line-height: 1.02;
+        letter-spacing: -0.01em;
+      }
+      .s5-headline .accent {
+        color: #00b0e5;
+      }
+      .s5-sub {
+        font-size: 22px;
+        color: #8da7b4;
+        max-width: 880px;
+      }
+      .s5-shells {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+        flex: 1;
+      }
+      .term {
+        background: #052633;
+        border: 1px solid #1a4456;
+        border-radius: 6px;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+      }
+      .term-bar {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 10px 14px;
+        background: #0a323e;
+        border-bottom: 1px solid #1a4456;
+      }
+      .term-bar .dot { width: 9px; height: 9px; border-radius: 999px; background: #1a4456; }
+      .term-bar .name {
+        margin-left: 12px;
+        font-size: 12px;
+        color: #ebf2f5;
+        font-family: ui-monospace, "JetBrains Mono", Menlo, monospace;
+        font-weight: 700;
+      }
+      .term-body {
+        flex: 1;
+        padding: 18px 18px;
+        font-family: ui-monospace, "JetBrains Mono", Menlo, monospace;
+        font-size: 14.5px;
+        line-height: 1.7;
+        color: #ebf2f5;
+        white-space: pre-wrap;
+        letter-spacing: 0;
+      }
+      .term-body .prompt { color: #00b0e5; font-weight: 700; }
+      .term-body .muted { color: #5d7a87; }
+      .term-body .ok { color: #62d84e; font-weight: 700; }
+      .term-body .acc { color: #00b0e5; font-weight: 700; }
+      .term-body .cursor {
+        display: inline-block;
+        width: 9px;
+        height: 18px;
+        background: #00b0e5;
+        vertical-align: text-bottom;
+        margin-left: 2px;
+      }
+
+      /* ---------- Scene 6: CTA ---------- */
+
+      #scene-6 {
+        padding: 100px 80px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-start;
+        gap: 22px;
+      }
+      .s6-tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 11px;
+        padding: 7px 14px;
+        border: 1px solid #1a4456;
+        background: #052633;
+        border-radius: 4px;
+        color: #ebf2f5;
+        font-size: 16px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+      }
+      .s6-tag .d {
+        width: 10px;
+        height: 10px;
+        border-radius: 999px;
+        background: #62d84e;
+      }
+      .s6-headline {
+        font-size: 116px;
+        font-weight: 900;
+        line-height: 0.96;
+        letter-spacing: -0.012em;
+        color: #ebf2f5;
+        max-width: 920px;
+      }
+      .s6-headline .accent { color: #00b0e5; }
+      .s6-link {
+        margin-top: 6px;
+        font-family: ui-monospace, "JetBrains Mono", Menlo, monospace;
+        font-size: 28px;
+        color: #00b0e5;
+        font-weight: 700;
+      }
+      .s6-meta {
+        display: flex;
+        gap: 12px;
+        margin-top: 18px;
+        flex-wrap: wrap;
+      }
+      .s6-credit {
+        margin-top: 26px;
+        font-size: 18px;
+        color: #5d7a87;
+        font-weight: 700;
+      }
+      .s6-credit b {
+        color: #8da7b4;
+        font-weight: 900;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="50"
+      data-width="1080"
+      data-height="1080"
+    >
+      <!-- Scene 1: title (0 -> 6.5) -->
+      <div
+        id="scene-1"
+        class="scene clip"
+        data-start="0"
+        data-duration="6.5"
+        data-track-index="1"
+        style="z-index: 1"
+      >
+        <div class="s1-eyebrow">
+          <span class="now-dot"></span>
+          <span class="label">servicenow agent army</span>
+          <span class="sub">·  Pierrondi EA leads</span>
+        </div>
+        <div class="s1-title">
+          ServiceNow architecture,<br />
+          <span class="accent">without the deck theater.</span>
+        </div>
+        <div class="s1-subtitle">
+          Twenty advisors deliberate every problem. Pierrondi EA refuses architecture before
+          a value figure is on the table, then hands off the council.
+        </div>
+        <div class="s1-meta">
+          <span class="pill"><span class="pill-dot"></span>20 advisors</span>
+          <span class="pill"><span class="pill-dot blue"></span>AI Agent Studio · NASK · Fluent SDK 4.6</span>
+        </div>
+      </div>
+
+      <!-- Scene 2: problem (6 -> 13) -->
+      <div
+        id="scene-2"
+        class="scene clip"
+        data-start="6"
+        data-duration="7"
+        data-track-index="2"
+        style="z-index: 2"
+      >
+        <span class="section-label" id="s2-eyebrow">The frame</span>
+        <div class="s2-quote" id="s2-quote">
+          Most ServiceNow advice<br />is theater.
+        </div>
+        <div class="s2-list">
+          <div class="s2-row" id="s2-row-1">
+            <span class="x-mark">×</span>
+            <span class="strike">Decks. Diagrams. North-star architecture.</span>
+          </div>
+          <div class="s2-row" id="s2-row-2">
+            <span class="x-mark">×</span>
+            <span class="strike">No metric attached. Group ownership.</span>
+          </div>
+          <div class="s2-row" id="s2-row-3">
+            <span class="check-mark">✓</span>
+            <span class="ok-text">Outcome · value · deliverables · risks.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Scene 3: app + deliberation (12.5 -> 23) -->
+      <div
+        id="scene-3"
+        class="scene clip"
+        data-start="12.5"
+        data-duration="10.5"
+        data-track-index="3"
+        style="z-index: 3"
+      >
+        <div class="s3-caption">
+          <div class="s3-headline" id="s3-headline">
+            One problem in.<br />
+            <span class="accent">Twenty advisors deliberate.</span>
+          </div>
+          <div class="s3-sub" id="s3-sub">
+            EN or PT-BR. Mock mode runs locally — no API key.
+          </div>
+        </div>
+        <div class="s3-frame" id="s3-frame">
+          <div class="browser-bar">
+            <span class="bd"></span><span class="bd"></span><span class="bd"></span>
+            <span class="url">localhost:3003 · servicenow agent army</span>
+          </div>
+          <img id="s3-img-form" src="03-form-filled.png" alt="form filled" />
+          <img
+            id="s3-img-mid"
+            src="04-deliberation-mid.png"
+            alt="deliberation in progress"
+            style="position:absolute; inset:0; opacity:0;"
+          />
+          <img
+            id="s3-img-done"
+            src="05-deliberation-complete.png"
+            alt="deliberation complete"
+            style="position:absolute; inset:0; opacity:0;"
+          />
+        </div>
+      </div>
+
+      <!-- Scene 4: outputs (22.5 -> 33) -->
+      <div
+        id="scene-4"
+        class="scene clip"
+        data-start="22.5"
+        data-duration="10.5"
+        data-track-index="4"
+        style="z-index: 4"
+      >
+        <div class="s4-caption">
+          <div class="s4-headline" id="s4-headline">Four artifacts. Paste-ready.</div>
+          <div class="s4-sub" id="s4-sub">
+            Agent spec · Workflow steps · NASK skill prompt · ServiceNow SDK scaffold.
+          </div>
+        </div>
+        <div class="s4-grid">
+          <div class="s4-card accent" id="s4-c1">
+            <span class="label">Agent spec</span>
+            <span class="title">AI Agent Studio JSON</span>
+            <div class="body">{
+  "id": "itsm-agent-9169",
+  "role": "Drafted from ITSM problem",
+  "surface": "AI Agent Studio + Now Assist for ITSM",
+  "guardrails": [
+    "Dry-run before any write",
+    "Append-only audit log",
+    "Signed approval token"
+  ]
+}</div>
+            <span class="copy">Copy</span>
+          </div>
+          <div class="s4-card" id="s4-c2">
+            <span class="label">Workflow steps</span>
+            <span class="title">ITSM draft workflow</span>
+            <div class="body">01  Capture intent
+02  Read context
+03  Reason
+04  Propose plan
+05  Human approval
+06  Execute (sub-prod)
+07  Audit + rollback</div>
+          </div>
+          <div class="s4-card" id="s4-c3">
+            <span class="label">Now Assist Skill Kit</span>
+            <span class="title">NASK skill prompt</span>
+            <div class="body">Skill: itsm-itsm-9169
+Goal: triage + suggest
+Inputs: record_sys_id,
+domain_hint, user_context
+Output: { plan, alts[3],
+audit_ref }</div>
+            <span class="copy">Copy</span>
+          </div>
+          <div class="s4-card" id="s4-c4">
+            <span class="label">ServiceNow SDK</span>
+            <span class="title">Fluent scaffold</span>
+            <div class="body">now-sdk init
+now-sdk add ai-agent
+now-sdk add nask-skill
+now-sdk build
+now-sdk deploy --target sub-prod</div>
+            <span class="copy">Copy</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Scene 5: Claude Code / Codex pitch (32.5 -> 43) -->
+      <div
+        id="scene-5"
+        class="scene clip"
+        data-start="32.5"
+        data-duration="10.5"
+        data-track-index="5"
+        style="z-index: 5"
+      >
+        <div>
+          <div class="s5-headline" id="s5-headline">
+            Drive it from <span class="accent">Claude Code.</span><br />
+            Or <span class="accent">Codex CLI.</span>
+          </div>
+          <div class="s5-sub" id="s5-sub" style="margin-top:14px;">
+            Same army, your editor. Skill prompts and agent specs land paste-ready.
+          </div>
+        </div>
+        <div class="s5-shells">
+          <div class="term" id="s5-term-1">
+            <div class="term-bar">
+              <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+              <span class="name">claude code</span>
+            </div>
+            <div class="term-body" id="s5-body-1"><span class="muted">$</span> <span class="prompt">/servicenow-agent-factory</span><br />
+<span class="muted">→ council deliberating…</span><br />
+<span class="ok">✓</span> Pierrondi EA outcome locked<br />
+<span class="ok">✓</span> Agent spec drafted<br />
+<span class="ok">✓</span> Workflow steps generated<br />
+<span class="ok">✓</span> NASK skill prompt ready<br />
+<span class="acc">→</span> Paste into AI Agent Studio<span class="cursor"></span></div>
+          </div>
+          <div class="term" id="s5-term-2">
+            <div class="term-bar">
+              <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+              <span class="name">codex</span>
+            </div>
+            <div class="term-body" id="s5-body-2"><span class="muted">$</span> <span class="prompt">codex run servicenow-army diagnose</span><br />
+<span class="muted">  --lead pierrondi --domain itsm</span><br />
+<br />
+<span class="acc">OUTCOME</span>  p95  7m → 2m  /  90 days<br />
+<span class="acc">VALUE</span>    BRL 1.2M / yr · 18k incidents<br />
+<span class="acc">RUN</span>      BRL  14k / yr Now Assist credits<br />
+<span class="ok">handoff →</span> Workflow Composer<span class="cursor"></span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Scene 6: CTA (42.5 -> 50) -->
+      <div
+        id="scene-6"
+        class="scene clip"
+        data-start="42.5"
+        data-duration="7.5"
+        data-track-index="6"
+        style="z-index: 6"
+      >
+        <span class="s6-tag" id="s6-tag"><span class="d"></span>v0.1 alpha · MIT · open source</span>
+        <div class="s6-headline" id="s6-headline">
+          Outcome.<br /><span class="accent">Then output.</span>
+        </div>
+        <div class="s6-link" id="s6-link">github.com/paulopierrondi/servicenow-agent-army</div>
+        <div class="s6-meta">
+          <span class="pill"><span class="pill-dot"></span>fork · run · refuse</span>
+          <span class="pill"><span class="pill-dot blue"></span>20 advisors waiting</span>
+        </div>
+        <div class="s6-credit" id="s6-credit"><b>Paulo Pierrondi</b> · TAE FSI Brazil · ServiceNow</div>
+      </div>
+
+      <!-- Persistent watermark + progress bar -->
+      <div class="watermark">
+        <span class="dot"></span>
+        <span>servicenow agent army</span>
+      </div>
+      <div class="progress-bar" id="progress"></div>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+
+      // ---------- Persistent overlay ----------
+      tl.to("#progress", { width: "100%", duration: 50, ease: "none" }, 0);
+
+      // ---------- Scene 1: title (0 -> 6.5) ----------
+      tl.fromTo("#scene-1", { opacity: 0 }, { opacity: 1, duration: 0.6, ease: "power2.out" }, 0.1);
+      tl.from("#scene-1 .s1-eyebrow", { opacity: 0, x: -20, duration: 0.6, ease: "power3.out" }, 0.4);
+      tl.from("#scene-1 .s1-title", { opacity: 0, y: 30, duration: 0.85, ease: "expo.out" }, 0.6);
+      tl.from("#scene-1 .s1-subtitle", { opacity: 0, y: 18, duration: 0.7, ease: "power3.out" }, 1.05);
+      tl.from("#scene-1 .s1-meta .pill", { opacity: 0, y: 12, scale: 0.95, duration: 0.55, ease: "back.out(1.4)", stagger: 0.12 }, 1.4);
+
+      // ---------- Scene 2: problem (6 -> 13) ----------
+      tl.fromTo("#scene-2", { opacity: 0 }, { opacity: 1, duration: 0.6, ease: "power2.out" }, 6.0);
+      tl.from("#s2-eyebrow", { opacity: 0, y: 12, duration: 0.45, ease: "power2.out" }, 6.3);
+      tl.from("#s2-quote", { opacity: 0, y: 26, duration: 0.7, ease: "expo.out" }, 6.5);
+      tl.from("#s2-row-1", { opacity: 0, x: -22, duration: 0.5, ease: "power3.out" }, 7.4);
+      tl.from("#s2-row-2", { opacity: 0, x: -22, duration: 0.5, ease: "power3.out" }, 7.65);
+      tl.from("#s2-row-3", { opacity: 0, x: -22, scale: 0.97, duration: 0.6, ease: "back.out(1.4)" }, 8.2);
+
+      // ---------- Scene 3: deliberation (12.5 -> 23) ----------
+      tl.fromTo("#scene-3", { opacity: 0 }, { opacity: 1, duration: 0.6, ease: "power2.out" }, 12.5);
+      tl.from("#s3-headline", { opacity: 0, y: 22, duration: 0.7, ease: "expo.out" }, 12.9);
+      tl.from("#s3-sub", { opacity: 0, y: 14, duration: 0.55, ease: "power3.out" }, 13.2);
+      tl.from("#s3-frame", { opacity: 0, scale: 0.97, duration: 0.7, ease: "power2.out" }, 13.4);
+      tl.fromTo(
+        "#s3-img-form",
+        { scale: 1.0 },
+        { scale: 1.04, duration: 4.5, ease: "power1.inOut" },
+        13.5,
+      );
+      tl.to("#s3-img-mid", { opacity: 1, duration: 0.6, ease: "power2.out" }, 16.5);
+      tl.fromTo(
+        "#s3-img-mid",
+        { scale: 1.0 },
+        { scale: 1.04, duration: 3.6, ease: "power1.inOut" },
+        16.5,
+      );
+      tl.to("#s3-img-done", { opacity: 1, duration: 0.55, ease: "power2.out" }, 19.6);
+
+      // ---------- Scene 4: outputs (22.5 -> 33) ----------
+      tl.fromTo("#scene-4", { opacity: 0 }, { opacity: 1, duration: 0.6, ease: "power2.out" }, 22.5);
+      tl.from("#s4-headline", { opacity: 0, y: 22, duration: 0.7, ease: "expo.out" }, 22.9);
+      tl.from("#s4-sub", { opacity: 0, y: 14, duration: 0.5, ease: "power3.out" }, 23.2);
+      tl.from(
+        ["#s4-c1", "#s4-c2", "#s4-c3", "#s4-c4"],
+        { opacity: 0, y: 22, scale: 0.96, duration: 0.55, ease: "back.out(1.3)", stagger: 0.13 },
+        23.5,
+      );
+
+      // ---------- Scene 5: Claude Code / Codex (32.5 -> 43) ----------
+      tl.fromTo("#scene-5", { opacity: 0 }, { opacity: 1, duration: 0.6, ease: "power2.out" }, 32.5);
+      tl.from("#s5-headline", { opacity: 0, y: 24, duration: 0.7, ease: "expo.out" }, 32.9);
+      tl.from("#s5-sub", { opacity: 0, y: 14, duration: 0.5, ease: "power3.out" }, 33.25);
+      tl.from("#s5-term-1", { opacity: 0, x: -28, scale: 0.97, duration: 0.6, ease: "power3.out" }, 33.6);
+      tl.from("#s5-term-2", { opacity: 0, x: 28, scale: 0.97, duration: 0.6, ease: "power3.out" }, 33.85);
+      const blinkRepeat = Math.ceil(8 / 1.0) - 1;
+      tl.to(
+        "#s5-term-1 .cursor, #s5-term-2 .cursor",
+        { opacity: 0, duration: 0.5, repeat: blinkRepeat, yoyo: true, ease: "steps(1)" },
+        34.5,
+      );
+
+      // ---------- Scene 6: CTA (42.5 -> 50) ----------
+      tl.fromTo("#scene-6", { opacity: 0 }, { opacity: 1, duration: 0.6, ease: "power2.out" }, 42.5);
+      tl.from("#s6-tag", { opacity: 0, y: 14, duration: 0.45, ease: "power3.out" }, 42.85);
+      tl.from("#s6-headline", { opacity: 0, y: 28, duration: 0.85, ease: "expo.out" }, 43.05);
+      tl.from("#s6-link", { opacity: 0, y: 16, duration: 0.55, ease: "power3.out" }, 43.6);
+      tl.from("#scene-6 .pill", { opacity: 0, y: 14, scale: 0.95, duration: 0.5, ease: "back.out(1.4)", stagger: 0.12 }, 43.9);
+      tl.from("#s6-credit", { opacity: 0, duration: 0.5, ease: "power2.out" }, 44.4);
+      tl.to("#progress", { opacity: 0.3, duration: 0.5, ease: "power2.in" }, 49.5);
+
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

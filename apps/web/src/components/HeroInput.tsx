@@ -21,10 +21,21 @@ export function HeroInput() {
 
   return (
     <section className="shell mt-10 mb-24">
-      <form onSubmit={submit} className="surface p-5 md:p-7 flex flex-col gap-4">
-        <label className="text-sm text-[var(--color-fg-muted)]" htmlFor="problem">
-          Describe your ServiceNow problem (EN or PT-BR)
-        </label>
+      <form
+        onSubmit={submit}
+        className="surface p-5 md:p-6 flex flex-col gap-4"
+        onKeyDown={(e) => {
+          if ((e.metaKey || e.ctrlKey) && e.key === "Enter") submit(e);
+        }}
+      >
+        <div className="flex items-center justify-between">
+          <label className="section-label" htmlFor="problem">
+            Describe your ServiceNow problem (EN or PT-BR)
+          </label>
+          <span className="text-[12px] text-[var(--color-fg-muted)]">
+            mock mode · no key required
+          </span>
+        </div>
         <textarea
           id="problem"
           required
@@ -32,18 +43,19 @@ export function HeroInput() {
           onChange={(e) => setProblem(e.target.value)}
           rows={3}
           placeholder={PLACEHOLDER}
-          className="bg-[var(--color-bg-soft)] border border-[var(--color-border)] rounded-md px-3 py-2.5 text-[15px] text-[var(--color-fg)] focus:outline-none focus:border-[var(--color-fg-muted)] resize-y"
+          className="input resize-y"
         />
-        <div className="flex flex-wrap gap-3 items-end">
+        <div className="flex flex-wrap gap-3 items-center">
           <div className="flex flex-col gap-1.5">
-            <label className="text-xs text-[var(--color-fg-muted)]" htmlFor="domain">
+            <label className="section-label" htmlFor="domain">
               Domain
             </label>
             <select
               id="domain"
               value={domain}
               onChange={(e) => setDomain(e.target.value as DomainId)}
-              className="bg-[var(--color-bg-soft)] border border-[var(--color-border)] rounded-md px-3 py-2 text-sm"
+              className="input"
+              style={{ width: "11rem" }}
             >
               {DOMAINS.map((d) => (
                 <option key={d.id} value={d.id}>
@@ -52,17 +64,17 @@ export function HeroInput() {
               ))}
             </select>
           </div>
-          <label className="flex items-center gap-2 text-sm text-[var(--color-fg-muted)] py-2">
+          <label className="flex items-center gap-2 text-[13px] text-[var(--color-fg-muted)] py-2 self-end">
             <input
               type="checkbox"
               checked={hasSubProd}
               onChange={(e) => setHasSubProd(e.target.checked)}
               className="accent-[var(--color-accent)]"
             />
-            I have a sub-production instance
+            Sub-prod available
           </label>
           <div className="flex-1" />
-          <button type="submit" className="btn btn-primary">
+          <button type="submit" className="btn btn-primary self-end">
             Deliberate
           </button>
         </div>

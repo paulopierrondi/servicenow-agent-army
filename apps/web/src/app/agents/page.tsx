@@ -16,9 +16,14 @@ export default async function AgentsPage() {
   return (
     <section className="shell py-12 md:py-16">
       <header className="mb-10 max-w-2xl">
-        <span className="tag">19 advisors · 6 groups</span>
-        <h1 className="mt-3 text-3xl md:text-4xl font-semibold tracking-tight">The Agent Army</h1>
-        <p className="mt-3 text-[var(--color-fg-muted)] leading-relaxed">
+        <span className="tag">
+          <span className="tag-dot tag-dot--now" />
+          19 advisors · 6 groups
+        </span>
+        <h1 className="mt-4 text-3xl md:text-[42px] font-black tracking-tight leading-[1.05]">
+          The Agent Army
+        </h1>
+        <p className="mt-3 text-[15px] text-[var(--color-fg-muted)] leading-relaxed">
           Each advisor has a role, a mission, a set of outputs, and a guardrail bound to its
           mission. Pick the group that matches your problem; the home page deliberation runs the
           council end-to-end.
@@ -33,13 +38,13 @@ export default async function AgentsPage() {
           if (groupAgents.length === 0) return null;
           return (
             <section key={group.id}>
-              <header className="flex items-baseline justify-between mb-4">
-                <h2 className="text-lg font-medium">{group.label}</h2>
-                <span className="text-xs text-[var(--color-fg-muted)]">
+              <header className="flex items-baseline justify-between mb-3 pb-2 border-b border-[var(--color-border)]">
+                <h2 className="text-[15px] font-medium tracking-tight">{group.label}</h2>
+                <span className="section-label">
                   {groupAgents.length} advisor{groupAgents.length === 1 ? "" : "s"}
                 </span>
               </header>
-              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                 {groupAgents.map((agent) => (
                   <AgentCard key={agent.id} agent={agent} />
                 ))}

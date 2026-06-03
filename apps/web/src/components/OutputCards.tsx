@@ -8,7 +8,8 @@ function CopyButton({ text }: { text: string }) {
   return (
     <button
       type="button"
-      className="btn text-xs py-1 px-2"
+      className="btn btn-ghost text-[12px] py-0.5 px-2"
+      style={{ height: 26 }}
       onClick={async () => {
         try {
           await navigator.clipboard.writeText(text);
@@ -19,7 +20,14 @@ function CopyButton({ text }: { text: string }) {
         }
       }}
     >
-      {copied ? "Copied" : "Copy"}
+      {copied ? (
+        <>
+          <span className="tag-dot tag-dot--success" />
+          Copied
+        </>
+      ) : (
+        "Copy"
+      )}
     </button>
   );
 }
@@ -28,7 +36,7 @@ export function OutputCards({ artifacts }: { artifacts: Artifacts }) {
   const specJson = JSON.stringify(artifacts.agentSpec, null, 2);
 
   return (
-    <div className="grid gap-4 md:grid-cols-2">
+    <div className="grid gap-3 md:grid-cols-2">
       <Card
         title="Agent spec"
         subtitle="AI Agent Studio JSON"
@@ -42,16 +50,21 @@ export function OutputCards({ artifacts }: { artifacts: Artifacts }) {
         subtitle={artifacts.workflow.name}
         actions={<CopyButton text={JSON.stringify(artifacts.workflow, null, 2)} />}
       >
-        <p className="text-xs text-[var(--color-fg-muted)] mb-2">
-          Trigger: {artifacts.workflow.trigger}
+        <p className="text-[12px] text-[var(--color-fg-muted)] mb-2.5">
+          <span className="section-label">Trigger</span>
+          <span className="ml-2">{artifacts.workflow.trigger}</span>
         </p>
-        <ol className="flex flex-col gap-2 text-sm">
+        <ol className="flex flex-col gap-2.5 text-[13px]">
           {artifacts.workflow.steps.map((s) => (
             <li key={s.id} className="flex gap-3">
-              <span className="text-[var(--color-fg-muted)] tabular-nums">{s.id}.</span>
-              <div>
-                <div className="font-medium">{s.title}</div>
-                <div className="text-[var(--color-fg-muted)] text-xs">{s.detail}</div>
+              <span className="text-[var(--color-fg-subtle)] tabular-nums font-mono text-[12px] pt-0.5">
+                0{s.id}
+              </span>
+              <div className="min-w-0">
+                <div className="font-medium tracking-tight">{s.title}</div>
+                <div className="text-[var(--color-fg-muted)] text-[12px] leading-relaxed">
+                  {s.detail}
+                </div>
               </div>
             </li>
           ))}
@@ -74,12 +87,18 @@ export function OutputCards({ artifacts }: { artifacts: Artifacts }) {
         <pre className="code">{artifacts.sdkScaffold.commands.join("\n")}</pre>
       </Card>
 
-      <Card title="Now Assist hook" subtitle={artifacts.nowAssistHook.surface}>
-        <p className="text-sm text-[var(--color-fg-muted)]">{artifacts.nowAssistHook.rationale}</p>
+      <Card
+        title="Now Assist hook"
+        subtitle={artifacts.nowAssistHook.surface}
+        accent
+      >
+        <p className="text-[13px] text-[var(--color-fg-muted)] leading-relaxed">
+          {artifacts.nowAssistHook.rationale}
+        </p>
       </Card>
 
       <Card title="Save to gallery" subtitle="Anonymous, no account needed (mock)">
-        <p className="text-sm text-[var(--color-fg-muted)] mb-3">
+        <p className="text-[13px] text-[var(--color-fg-muted)] mb-3 leading-relaxed">
           Pin this draft to a public gallery so other builders can riff on it. The real submission
           flow lands in M5 along with auth + audit viewer.
         </p>
@@ -95,19 +114,32 @@ function Card({
   title,
   subtitle,
   actions,
+  accent,
   children,
 }: {
   title: string;
   subtitle?: string;
   actions?: React.ReactNode;
+  accent?: boolean;
   children: React.ReactNode;
 }) {
   return (
-    <div className="surface p-5 fade-in">
+    <div
+      className="surface p-4 fade-in relative overflow-hidden"
+      style={
+        accent
+          ? {
+              boxShadow: "inset 2px 0 0 0 var(--color-accent)",
+            }
+          : undefined
+      }
+    >
       <div className="flex items-start justify-between gap-3 mb-3">
-        <div>
-          <h4 className="text-sm font-medium">{title}</h4>
-          {subtitle ? <p className="text-xs text-[var(--color-fg-muted)]">{subtitle}</p> : null}
+        <div className="min-w-0">
+          <h4 className="text-[14px] font-bold tracking-tight">{title}</h4>
+          {subtitle ? (
+            <p className="text-[12px] text-[var(--color-fg-muted)] mt-0.5">{subtitle}</p>
+          ) : null}
         </div>
         {actions}
       </div>

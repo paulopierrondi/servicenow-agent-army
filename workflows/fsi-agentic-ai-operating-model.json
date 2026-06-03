@@ -1,0 +1,61 @@
+{
+  "id": "fsi-agentic-ai-operating-model",
+  "name": "FSI Agentic AI Operating Model Workflow",
+  "serviceNowSurface": "AI Agent Studio plus Now Assist Panel, AI Control Tower, and CMDB/CSDM read-only analysis",
+  "trigger": "Executive or platform owner asks how to use ServiceNow AI agents against FSI operating priorities",
+  "businessOutcome": "Turn agentic AI ideas into a governed operating model that increases adoption velocity and supports a credible expansion case.",
+  "inputs": [
+    "target workflow",
+    "business outcome",
+    "baseline metric",
+    "current ServiceNow surfaces",
+    "data sensitivity",
+    "available owners",
+    "candidate AI agents"
+  ],
+  "agents": [
+    "Pierrondi EA",
+    "Now Assist Coach",
+    "Service Ownership Data Steward",
+    "Agentic Adoption Operator",
+    "AI Control Tower Governor",
+    "FSI Value Expansion Analyst",
+    "Guardrails Reviewer",
+    "ATF Test Generator"
+  ],
+  "steps": [
+    "Force the outcome metric, value hypothesis, owner, and decision needed before architecture work begins.",
+    "Map the request to OOTB Now Assist and AI Agent Studio surfaces before proposing custom agent build.",
+    "Assess CMDB/CSDM service ownership and data readiness needed for trustworthy agent execution.",
+    "Prioritize candidate agentic workflows by value, feasibility, adoption path, and governance risk.",
+    "Define the operating model: owners, weekly cadence, enablement loop, adoption metrics, and go/no-go thresholds.",
+    "Design AI Control Tower controls for discovery, observability, governance, security, measurement, and kill switch.",
+    "Create the pilot plan with human approval gates, rollback path, audit events, and test cases.",
+    "Produce the executive expansion narrative connecting operating model, adoption velocity, and revenue/value expansion."
+  ],
+  "approvalPoints": [
+    "Before enabling production triggers or write actions",
+    "Before using customer-specific value numbers in executive material",
+    "Before connecting external agents, MCP gateways, or third-party model providers",
+    "Before publishing readiness scores outside the platform team"
+  ],
+  "failureStates": [
+    "No named owner for the workflow or agent",
+    "No baseline metric or source quality for the value claim",
+    "CMDB/CSDM data trust below advisory threshold",
+    "No audit or rollback path for an action-capable agent",
+    "Custom agent proposed while OOTB Now Assist covers the workflow at lower risk"
+  ],
+  "auditNotes": [
+    "Record prompt/template version, workflow version, model/provider, data source, tool calls, approvals, blocked actions, and user-visible output.",
+    "Separate verified facts, benchmark assumptions, and hypotheses in every value narrative.",
+    "Keep secrets and credentials out of prompts, Markdown, logs, screenshots, and demo artifacts."
+  ],
+  "tests": [
+    "Missing owner returns a no-go and remediation ask.",
+    "Read-only data readiness assessment produces recommendations but no CMDB writes.",
+    "Workflow with no approval gate cannot use write actions.",
+    "Value claim without source is downgraded to hypothesis.",
+    "OOTB Now Assist match must be considered before custom agent build."
+  ]
+}

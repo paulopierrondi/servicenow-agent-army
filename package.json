@@ -36,6 +36,7 @@
     "@openai/agents": "^0.8.5",
     "@openai/codex-sdk": "^0.125.0",
     "@servicenow/sdk": "^4.6.0",
+    "puppeteer-core": "^24.42.0",
     "turbo": "^2.3.0"
   }
 }

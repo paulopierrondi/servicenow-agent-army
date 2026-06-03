@@ -25,5 +25,23 @@
     "agents": ["workflow-composer", "servicenow-sdk-builder", "guardrails-reviewer"],
     "steps": 8,
     "path": "workflows/request-fulfillment-agent.json"
+  },
+  {
+    "id": "fsi-agentic-ai-operating-model",
+    "name": "FSI Agentic AI Operating Model Workflow",
+    "serviceNowSurface": "AI Agent Studio plus Now Assist Panel, AI Control Tower, and CMDB/CSDM read-only analysis",
+    "trigger": "Executive or platform owner asks how to use ServiceNow AI agents against FSI operating priorities",
+    "agents": [
+      "pierrondi-enterprise-architect",
+      "now-assist-coach",
+      "service-ownership-data-steward",
+      "agentic-adoption-operator",
+      "ai-control-tower-governor",
+      "fsi-value-expansion-analyst",
+      "guardrails-reviewer",
+      "atf-test-generator"
+    ],
+    "steps": 8,
+    "path": "workflows/fsi-agentic-ai-operating-model.json"
   }
 ]

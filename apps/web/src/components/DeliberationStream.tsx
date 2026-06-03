@@ -107,42 +107,74 @@ export function DeliberationStream({
     containerRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
   }, []);
 
+  const doneCount = rows.filter((r) => r.status === "done").length;
+
   return (
-    <div ref={containerRef} className="mt-7 flex flex-col gap-4">
+    <div ref={containerRef} className="mt-6 flex flex-col gap-4">
       <div className="surface p-5">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-sm font-medium tracking-wide uppercase text-[var(--color-fg-muted)]">
-            Council deliberation
-          </h3>
-          <span className="text-xs text-[var(--color-fg-muted)]">
-            {done ? "complete" : `${rows.filter((r) => r.status === "done").length} of 7 done`}
+          <div className="flex items-center gap-2">
+            <span className="section-label">Council deliberation</span>
+            {!done ? <span className="dot-pulse" aria-label="running" /> : null}
+          </div>
+          <span className="tag">
+            <span className={done ? "tag-dot tag-dot--now" : "tag-dot tag-dot--accent"} />
+            {done ? "complete" : `${doneCount} of 7`}
           </span>
         </div>
-        <ul className="flex flex-col gap-3">
-          {rows.map((row) => (
-            <li key={row.id} className="fade-in border-l-2 border-[var(--color-border)] pl-4">
-              <div className="flex items-center gap-2 mb-1">
-                <span className="text-sm font-medium">{row.label}</span>
-                {row.status === "running" ? (
-                  <span className="dot-pulse" aria-label="thinking" />
-                ) : (
-                  <span className="tag">done</span>
-                )}
+        <ul className="flex flex-col">
+          {rows.map((row, idx) => (
+            <li
+              key={row.id}
+              className={`slide-in flex gap-3 py-2.5 ${
+                idx < rows.length - 1 ? "border-b border-[var(--color-border)]" : ""
+              }`}
+            >
+              <div className="flex flex-col items-center pt-1">
+                <span
+                  className={`inline-block w-2 h-2 rounded-full ${
+                    row.status === "done" ? "bg-[var(--color-now-green)]" : "bg-[var(--color-accent)]"
+                  }`}
+                />
+                {idx < rows.length - 1 ? (
+                  <span className="flex-1 w-px bg-[var(--color-border)] mt-1" />
+                ) : null}
               </div>
-              <ul className="text-sm text-[var(--color-fg-muted)] flex flex-col gap-1">
-                {row.thoughts.map((t) => (
-                  <li key={`${row.id}:${t}`} className="fade-in">
-                    {t}
-                  </li>
-                ))}
-              </ul>
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-[13.5px] font-bold tracking-tight">{row.label}</span>
+                  {row.status === "done" ? (
+                    <span className="tag">
+                      <span className="tag-dot tag-dot--now" />
+                      done
+                    </span>
+                  ) : (
+                    <span className="tag">
+                      <span className="dot-pulse" />
+                      thinking
+                    </span>
+                  )}
+                </div>
+                <ul className="text-[13px] text-[var(--color-fg-muted)] flex flex-col gap-1 leading-relaxed">
+                  {row.thoughts.map((t) => (
+                    <li key={`${row.id}:${t}`} className="fade-in">
+                      {t}
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </li>
           ))}
           {rows.length === 0 ? (
-            <li className="text-sm text-[var(--color-fg-muted)]">Warming up the council...</li>
+            <li className="text-[13px] text-[var(--color-fg-muted)] py-2">
+              <span className="dot-pulse mr-2" />
+              Warming up the council…
+            </li>
           ) : null}
         </ul>
-        {error ? <p className="mt-4 text-sm text-[var(--color-accent)]">Error: {error}</p> : null}
+        {error ? (
+          <p className="mt-4 text-[13px] text-[var(--color-danger)]">Error: {error}</p>
+        ) : null}
       </div>
 
       {done && artifacts ? <OutputCards artifacts={artifacts} /> : null}

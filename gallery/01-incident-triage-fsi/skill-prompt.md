@@ -29,6 +29,10 @@ credit-related incidents.
 ```
 
 ## Guidance
+- The `assignment_group` hint may be sourced or cross-checked from the custom
+  predictive routing assist (top-3 with confidence, trained on the instance's
+  own resolved incidents — see predictive-routing-assist.md). It is ASSIST ONLY:
+  surface the top-3, never auto-apply, and respect the 0.55 confidence floor.
 - Stay grounded. If the KB scope returns nothing relevant, set kb_top3 to an
   empty array and return summary only.
 - Cite the KB sys_id in `rationale`. Never paraphrase a KB article without a

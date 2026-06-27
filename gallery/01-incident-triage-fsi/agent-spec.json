@@ -24,7 +24,8 @@
   ],
   "outputs": [
     "category and sub-category recommendation with confidence",
-    "assignment_group recommendation with confidence",
+    "assignment_group recommendation with confidence (top-3, model-backed; see predictive-routing-assist.md)",
+    "SLA-breach risk band (low/medium/high) as an early warning",
     "top three KB articles with link and one-line rationale",
     "incident summary paragraph",
     "PII or credit-data flag for Guardian"
@@ -33,7 +34,8 @@
     "Now Assist for ITSM Resolution Suggestion (OOTB)",
     "Now Assist for ITSM Incident Summarization (OOTB)",
     "kb_knowledge read with tag filter set to itsm-resolution",
-    "Now Assist Guardian sensitive-topic filter"
+    "Now Assist Guardian sensitive-topic filter",
+    "Custom predictive routing + SLA-risk assist trained on the instance's own resolved incidents (assist only, never auto-route; top-3 0.688 vs 0.431 baseline, top-1 0.546 not autonomous; confidence floor 0.55) - see predictive-routing-assist.md"
   ],
   "mustNotDo": [
     "Auto-close any incident",
@@ -57,6 +59,7 @@
     "Incident tagged credit_dispute requires manual approval before any state change",
     "Resolution Suggestion precision on a 100-incident gold set above 70 percent before promotion",
     "Guardian sensitive-topic blocks a synthetic CPF-bearing comment in sub-prod",
-    "Audit log retrieval simulation completes within 24 hours"
+    "Audit log retrieval simulation completes within 24 hours",
+    "Predictive routing assist returns a top-3 assignment_group list with confidence and is flagged low_confidence (never auto-applied) when best confidence is below 0.55"
   ]
 }

@@ -21,6 +21,7 @@
     "Read incident fields with PII fields masked client-side before sending to the model.",
     "Run PII and credit-data heuristic; if hit, set guardian_flag = true and route to Guardian sensitive-topic check.",
     "Call Now Assist Resolution Suggestion against the itsm-resolution KB scope; capture top three with confidence.",
+    "Call the custom predictive routing + SLA-risk assist (trained on the instance's own resolved incidents) to enrich the assignment_group hint with a top-3 list and an SLA-breach early-warning band; assist only, never auto-route, confidence floor 0.55 (see predictive-routing-assist.md).",
     "Call Now Assist Incident Summarization for a one-paragraph hand-off note.",
     "Render the triage panel inside Agent Workspace with citations, confidence, and a clear escalate-to-human button.",
     "Log the suggestion event to sn_aia_execution_* with prompt, response, user, and timestamp.",
@@ -33,6 +34,7 @@
   ],
   "failureStates": [
     "Now Assist domain skill returns no suggestion above the confidence floor: panel falls back to manual triage and logs a low-confidence event.",
+    "Predictive routing assist is unavailable or returns below the 0.55 confidence floor: panel hides the model hint, keeps the OOTB Now Assist suggestion, and logs a low-confidence event - no degradation of the manual path.",
     "Guardian sensitive-topic filter blocks the prompt: panel surfaces a sanitized version and asks the analyst to proceed manually.",
     "KB scope returns zero results: panel marks the incident as KB-gap candidate for the Knowledge Curator backlog."
   ],

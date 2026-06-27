@@ -22,7 +22,7 @@
     "Summarize the incident and missing data.",
     "Check known issue patterns and related incidents.",
     "Draft diagnostic steps.",
-    "Recommend assignment group or escalation path.",
+    "Recommend assignment group or escalation path (optionally enriched by a custom predictive routing assist trained on the instance's own resolved incidents: top-3 suggestions with confidence, assist only, human approval still required before changing assignment group).",
     "Flag VIP, security, and outage indicators.",
     "Ask for human approval before outbound communication.",
     "Produce a work note draft and resolution plan."
